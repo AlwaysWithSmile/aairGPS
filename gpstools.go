@@ -49,13 +49,6 @@ func recoveryAppFunction() {
 	fmt.Println(getDT(), "Application restored after Error...")
 }
 
-//-----------------------------------------------------------------------------
-func getDT() string {
-	currentTime := time.Now()
-	return currentTime.Format("2006.01.02 15:04:05") + " > "
-	//return currentTime.String() + " > "
-}
-
 //-------------------------------------------------------------------------
 func getQuatedJSON(datJSON string, valJSON string, tpJSON int) string {
 	var rez_json string
