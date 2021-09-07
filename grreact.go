@@ -133,7 +133,7 @@ func startGBR(userid, js_name, js_param string, conPosition int) string {
 	//{"cmnd":"start","id":"0","name":"token","param":"semen2021"}
 	s_json := ""
 	if start_pass == js_param { //Device loging
-		//userid - IMEI of device; js_name - google accound addr; js_param - password
+		//userid - Token of device; js_name - token; js_param - password
 		s_json = "{" + string(0x0D) + string(0x0A)
 		s_json += getQuatedJSON("reglist", "[", 0) + string(0x0D) + string(0x0A)
 		s_json += getGBRlist(0) + "],"
