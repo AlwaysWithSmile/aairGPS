@@ -484,7 +484,7 @@ func getALARMlist(objectIden, gbrUIN string) string {
 				s_json_temp += getQuatedJSON("obadr", columns[i], 1) + "," + string(0x0D) + string(0x0A)
 			}
 			if i == 8 && is_Single == false { // Object tel
-				s_json_temp += getQuatedJSON("obtel", columns[i], 1) + "," + string(0x0D) + string(0x0A)
+				s_json_temp += getQuatedJSON("obowner", columns[i], 1) + "," + string(0x0D) + string(0x0A)
 			}
 			if i == 9 && is_Single == false { // Object longitude
 				s_json_temp += getQuatedJSON("lon", columns[i], 1) + "," + string(0x0D) + string(0x0A)
@@ -636,9 +636,7 @@ func getObjGeneral(objUIN string, isKey bool) string {
 			if i == 2 { // OBADR
 				s_json += getQuatedJSON("obadr", columns[i], 1) + "," + string(0x0D) + string(0x0A)
 			}
-			if i == 3 { // OBTEL
-				s_json += getQuatedJSON("obtel", columns[i], 1) + "," + string(0x0D) + string(0x0A)
-			}
+			
 			if i == 4 { // OHRANA
 				s_json += getQuatedJSON("status", columns[i], 1) + "," + string(0x0D) + string(0x0A)
 			}
