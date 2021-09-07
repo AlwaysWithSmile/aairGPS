@@ -417,6 +417,12 @@ func getALARMlist(objectIden, gbrUIN string) string {
 		s_sql += "FROM objectlist INNER JOIN eventlist on (objectlist.IDOB = eventlist.OBJECTID) "
 		s_sql += "INNER JOIN codelist on (eventlist.CODEID = codelist.IDCODE) WHERE (ISNEW>0) AND (ISFINISH=0) AND "
 		s_sql += "(objectlist.IDOB=" + objectIden + ") ORDER BY objectlist.IDOB, eventlist.IDEV DESC"
+
+		/**TODO Testing Layout*/
+		/*alarmlist - разбить obtel на obowner & obphone*/
+
+		//s_sql = "SELECT IDMAPA,MAPAOBJ,MAPAOPYS,MAPAKIND,MAPAWAY FROM mapalist"
+		//s_sql +="WHERE MAPAOBJ=\" + objUIN + \" ORDER BY MAPAOPYS"
 	} else {
 		s_sql = "SELECT eventlist.IDEV,eventlist.EVDATA,eventlist.CODEID,eventlist.ISNEW,"
 		s_sql += "eventlist.OBJECTID,objectlist.IDOB,objectlist.OBNAME,objectlist.OBADR,"
