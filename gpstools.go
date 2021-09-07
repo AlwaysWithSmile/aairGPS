@@ -636,7 +636,6 @@ func getObjGeneral(objUIN string, isKey bool) string {
 			if i == 2 { // OBADR
 				s_json += getQuatedJSON("obadr", columns[i], 1) + "," + string(0x0D) + string(0x0A)
 			}
-			
 			if i == 4 { // OHRANA
 				s_json += getQuatedJSON("status", columns[i], 1) + "," + string(0x0D) + string(0x0A)
 			}
