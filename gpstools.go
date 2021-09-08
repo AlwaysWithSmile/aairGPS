@@ -412,7 +412,7 @@ func getALARMlist(objectIden, gbrUIN string) string {
 	if is_Single == true {
 		s_sql = "SELECT eventlist.IDEV,eventlist.EVDATA,eventlist.CODEID,eventlist.ISNEW,"
 		s_sql += "eventlist.OBJECTID,objectlist.IDOB,objectlist.OBNAME,objectlist.OBADR,"
-		s_sql += "objectlist.DOLGOTA,objectlist.SHIROTA,objectlist.OHRANA,objectlist.PULTADR,"
+		s_sql += "objectlist.OBTEL,objectlist.DOLGOTA,objectlist.SHIROTA,objectlist.OHRANA,objectlist.PULTADR,"
 		s_sql += "objectlist.AVATAR,codelist.IDCODE,codelist.EVENTS,eventlist.ZONENUM,eventlist.ISGBR "
 		s_sql += "FROM objectlist INNER JOIN eventlist on (objectlist.IDOB = eventlist.OBJECTID) "
 		s_sql += "INNER JOIN codelist on (eventlist.CODEID = codelist.IDCODE) WHERE (ISNEW>0) AND (ISFINISH=0) AND "
@@ -426,7 +426,7 @@ func getALARMlist(objectIden, gbrUIN string) string {
 	} else {
 		s_sql = "SELECT eventlist.IDEV,eventlist.EVDATA,eventlist.CODEID,eventlist.ISNEW,"
 		s_sql += "eventlist.OBJECTID,objectlist.IDOB,objectlist.OBNAME,objectlist.OBADR,"
-		s_sql += "objectlist.DOLGOTA,objectlist.SHIROTA,objectlist.OHRANA,objectlist.PULTADR,"
+		s_sql += "objectlist.OBTEL,objectlist.DOLGOTA,objectlist.SHIROTA,objectlist.OHRANA,objectlist.PULTADR,"
 		s_sql += "objectlist.AVATAR,codelist.IDCODE,codelist.EVENTS,eventlist.ZONENUM,eventlist.ISGBR "
 		s_sql += "FROM objectlist INNER JOIN eventlist on (objectlist.IDOB = eventlist.OBJECTID) "
 		s_sql += "INNER JOIN codelist on (eventlist.CODEID = codelist.IDCODE) WHERE (ISNEW>0) AND (ISFINISH=0) "
@@ -595,7 +595,7 @@ func getObjectStatus(objUIN string) (string, string) {
 
 //------------------------------------------------------------------------------
 func getObjGeneral(objUIN string, isKey bool) string {
-	s_sql := "SELECT IDOB,OBNAME,OBADR,OHRANA,SVIZI,MOREINFO,INFODETAIL,"
+	s_sql := "SELECT IDOB,OBNAME,OBADR,OBTEL,OHRANA,SVIZI,MOREINFO,INFODETAIL,"
 	s_sql += "concat(PULTADR,'.0',AVATAR) AS PULTNUMBER,DOLGOTA,SHIROTA "
 	s_sql += "FROM objectlist WHERE IDOB=" + objUIN + " LIMIT 1"
 
