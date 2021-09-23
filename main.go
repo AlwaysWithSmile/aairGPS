@@ -57,8 +57,8 @@ func ReadConfig() {
 	skm_host = "localhost"
 	skm_port = ":3306"
 
-	sg_host = "192.168.88.30"
-	sg_port = "7390"
+	sg_host = "192.168.88.178"
+	sg_port = "5021"
 	sg_time = "650"
 
 	gps_socket_port = ":9090"

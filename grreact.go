@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+
 	"time"
 
 	//	"math/rand"
@@ -31,6 +32,7 @@ type gbrList []struct{
 func getJSON(url string, target interface{})error{
 	return json.NewDecoder(bytes.NewBufferString(url)).Decode(target)
 }
+
 //========================= MAIN LOGIC =======================================
 func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 	var gbrlistSout gbrList
@@ -66,12 +68,7 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 
 		switch js_cmnd {
 		case "start": //First start
-			//	js_result = startGBR(js_iden, js_name, js_param, getSocketIndex(conn))
-			msg := []byte("Hello on Serverside!")
-			err = conn.WriteMessage(websocket.TextMessage, msg)
-			if err != nil{
-				log.Println(err)
-			}
+
 		case "login": //Loging for user
 			js_result = logGBR(js_iden, js_name, js_param, getSocketIndex(conn))
 		case "alarmlist": //Get alarm list
