@@ -1,14 +1,17 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"log"
 	"time"
 
 	//	"math/rand"
 	"strconv"
 
 	"github.com/gorilla/websocket"
+
 )
 
 type AirQuery struct {
@@ -18,8 +21,20 @@ type AirQuery struct {
 	Param string `json:"param"`
 }
 
+type gbrList []struct{
+	Region string `json:"region"`
+	Number string `json:"number"`
+	GbrlistArray []string `json:"gbrlist"`
+}
+
+//========================= get JSON func =======================================
+func getJSON(url string, target interface{})error{
+	return json.NewDecoder(bytes.NewBufferString(url)).Decode(target)
+}
 //========================= MAIN LOGIC =======================================
 func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
+	var gbrlistSout gbrList
+	getJSON("http://api-cs.ohholding.com.ua/gbr_list/get", &gbrlistSout)
 	var (
 		airDecoding AirQuery
 		strJSON     []byte
@@ -51,7 +66,12 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 
 		switch js_cmnd {
 		case "start": //First start
-			js_result = startGBR(js_iden, js_name, js_param, getSocketIndex(conn))
+			//	js_result = startGBR(js_iden, js_name, js_param, getSocketIndex(conn))
+			msg := []byte("Hello on Serverside!")
+			err = conn.WriteMessage(websocket.TextMessage, msg)
+			if err != nil{
+				log.Println(err)
+			}
 		case "login": //Loging for user
 			js_result = logGBR(js_iden, js_name, js_param, getSocketIndex(conn))
 		case "alarmlist": //Get alarm list
@@ -150,7 +170,6 @@ func startGBR(userid, js_name, js_param string, conPosition int) string {
 		if conPosition >= 0 && conPosition < websock_addr_counter {
 			websock_send_device[conPosition] = js_name
 		}
-
 	} else {
 		s_json = "{" + string(0x0D) + string(0x0A)
 		s_json += getQuatedJSON("id", userid, 1) + "," + string(0x0D) + string(0x0A)
@@ -160,6 +179,12 @@ func startGBR(userid, js_name, js_param string, conPosition int) string {
 		s_json += "}" + string(0x0D) + string(0x0A)
 	}
 	return s_json
+}
+
+//------------------------------------------------------------------------------
+func startGPStest(userid, js_name, js_param string, conPosition int) string {
+
+	return ""
 }
 
 //------------------------------------------------------------------------------
