@@ -214,7 +214,6 @@ func logGBR(userid, js_name, js_param string, conPosition int) string {
 	//gbr_valid := (dbGetIntData(s_sql, 0) > 0)
 	s_sql = "SELECT IDPERS,FIOPERS,PAROL FROM personality WHERE IDPERS=" + dbQuatedString(js_name)
 	s_json := ""
-
 	if js_name != "-1" && js_param != "-111" {
 		s_json = "{" + string(0x0D) + string(0x0A)
 		s_json = s_json + getQuatedJSON("id", userid, 1) + "," + string(0x0D) + string(0x0A)
