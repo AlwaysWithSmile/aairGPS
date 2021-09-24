@@ -4,15 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"log"
-
+	"strings"
 	"time"
 
 	//	"math/rand"
 	"strconv"
 
 	"github.com/gorilla/websocket"
-
 )
 
 type AirQuery struct {
@@ -23,9 +21,15 @@ type AirQuery struct {
 }
 
 type gbrList []struct{
+
 	Region string `json:"region"`
 	Number string `json:"number"`
 	GbrlistArray []string `json:"gbrlist"`
+}
+
+type AppSend struct{
+	Command string `json:"cmnd"`
+	ID string `json:"id"`
 }
 
 //========================= get JSON func =======================================
@@ -33,6 +37,15 @@ func getJSON(url string, target interface{})error{
 	return json.NewDecoder(bytes.NewBufferString(url)).Decode(target)
 }
 
+func _UnescapeUnicodeCharactersInJSON(_jsonRaw json.RawMessage)(json.RawMessage, error){
+	str, err := strconv.Unquote(strings.Replace(strconv.Quote(string(_jsonRaw)),`\\u`,`\u`,-1))
+	if err != nil {
+		panic(err)
+	}
+	return []byte(str), nil
+}
+var gbrJsonRawEscaped json.RawMessage
+var gbrJsonRawUnescaped json.RawMessage
 //========================= MAIN LOGIC =======================================
 func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 	var gbrlistSout gbrList
@@ -66,10 +79,17 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 		js_cmnd = airDecoding.Cmnd
 		js_param = airDecoding.Param
 
+
+		getJSON("http://api-cs.ohholding.com.ua/gbr_list/get", &gbrlistSout)
+		b := []byte(`{"gbrlist":[{"id_gbr":1,"region":"\u041a\u0438\u0435\u0432","number":"71"},{"id_gbr":2,"region":"\u041a\u0438\u0435\u0432","number":"72"},{"id_gbr":3,"region":"\u041a\u0438\u0435\u0432","number":"73"},{"id_gbr":4,"region":"\u041a\u0438\u0435\u0432","number":"74"},{"id_gbr":5,"region":"\u041a\u0438\u0435\u0432","number":"75"},{"id_gbr":6,"region":"\u041a\u0438\u0435\u0432","number":"78"},{"id_gbr":7,"region":"\u041a\u0438\u0435\u0432","number":"79"},{"id_gbr":8,"region":"\u041a\u0438\u0435\u0432","number":"80"},{"id_gbr":9,"region":"\u041a\u0438\u0435\u0432","number":"81"},{"id_gbr":10,"region":"\u041a\u0438\u0435\u0432","number":"82"},{"id_gbr":11,"region":"\u041a\u0438\u0435\u0432","number":"83"},{"id_gbr":12,"region":"\u041a\u0438\u0435\u0432","number":"84"},{"id_gbr":13,"region":"\u041a\u0438\u0435\u0432","number":"85"},{"id_gbr":14,"region":"\u041a\u0438\u0435\u0432","number":"86"},{"id_gbr":15,"region":"\u041a\u0438\u0435\u0432","number":"88"},{"id_gbr":16,"region":"\u041a\u0438\u0435\u0432","number":"89"},{"id_gbr":17,"region":"\u041a\u0438\u0435\u0432","number":"92"},{"id_gbr":18,"region":"\u0417\u0430\u043f\u043e\u0440\u043e\u0436\u044c\u0435","number":"\u0411\u0430\u0439\u043a\u0430\u043b 1"},{"id_gbr":19,"region":"\u0417\u0430\u043f\u043e\u0440\u043e\u0436\u044c\u0435","number":"\u0411\u0430\u0439\u043a\u0430\u043b 2"},{"id_gbr":20,"region":"\u0417\u0430\u043f\u043e\u0440\u043e\u0436\u044c\u0435","number":"\u0411\u0430\u0439\u043a\u0430\u043b 3"},{"id_gbr":21,"region":"\u0417\u0430\u043f\u043e\u0440\u043e\u0436\u044c\u0435","number":"\u0411\u0430\u0439\u043a\u0430\u043b 4"},{"id_gbr":22,"region":"\u0417\u0430\u043f\u043e\u0440\u043e\u0436\u044c\u0435","number":"\u0411\u0430\u0439\u043a\u0430\u043b 5"},{"id_gbr":23,"region":"\u0417\u0430\u043f\u043e\u0440\u043e\u0436\u044c\u0435","number":"\u0411\u0430\u0439\u043a\u0430\u043b 6"},{"id_gbr":24,"region":"\u0417\u0430\u043f\u043e\u0440\u043e\u0436\u044c\u0435","number":"\u0411\u0430\u0439\u043a\u0430\u043b 7"},{"id_gbr":25,"region":"\u0414\u043d\u0435\u043f\u0440","number":"\u0414\u043d\u0435\u043f\u0440 1"},{"id_gbr":26,"region":"\u0414\u043d\u0435\u043f\u0440","number":"\u0414\u043d\u0435\u043f\u0440 2"},{"id_gbr":27,"region":"\u0414\u043d\u0435\u043f\u0440","number":"\u0414\u043d\u0435\u043f\u0440 3"},{"id_gbr":28,"region":"\u0414\u043d\u0435\u043f\u0440","number":"\u0414\u043d\u0435\u043f\u0440 4"},{"id_gbr":29,"region":"\u0414\u043d\u0435\u043f\u0440","number":"\u0414\u043d\u0435\u043f\u0440 5"},{"id_gbr":30,"region":"\u0414\u043d\u0435\u043f\u0440","number":"\u0414\u043d\u0435\u043f\u0440 6"},{"id_gbr":31,"region":"\u041a\u0430\u043c\u0435\u043d\u0441\u043a","number":"\u041a\u0430\u043c\u0435\u043d\u0441\u043a 1"},{"id_gbr":32,"region":"\u041a\u0430\u043c\u0435\u043d\u0441\u043a","number":"\u041a\u0430\u043c\u0435\u043d\u0441\u043a 2"},{"id_gbr":35,"region":"\u041a\u0440\u0438\u0432\u043e\u0439 \u0420\u043e\u0433","number":"\u041a\u0440\u0438\u0432\u0431\u0430\u0441 1"},{"id_gbr":36,"region":"\u041a\u0440\u0438\u0432\u043e\u0439 \u0420\u043e\u0433","number":"\u041a\u0440\u0438\u0432\u0431\u0430\u0441 2\r\n"},{"id_gbr":37,"region":"\u041a\u0440\u0438\u0432\u043e\u0439 \u0420\u043e\u0433","number":"\u041a\u0440\u0438\u0432\u0431\u0430\u0441 3"},{"id_gbr":38,"region":"\u041a\u0440\u0438\u0432\u043e\u0439 \u0420\u043e\u0433","number":"\u041a\u0440\u0438\u0432\u0431\u0430\u0441 4"},{"id_gbr":39,"region":"\u041a\u0440\u0438\u0432\u043e\u0439 \u0420\u043e\u0433","number":"\u041a\u0440\u0438\u0432\u0431\u0430\u0441 7"},{"id_gbr":40,"region":"\u041a\u0440\u0438\u0432\u043e\u0439 \u0420\u043e\u0433","number":"\u041a\u0440\u0438\u0432\u0431\u0430\u0441 6"},{"id_gbr":43,"region":"\u0414\u043e\u0431\u0440\u043e\u043f\u043e\u043b\u044c\u0435","number":"\u0421\u043e\u043a\u043e\u043b"},{"id_gbr":49,"region":"\u041b\u044c\u0432\u043e\u0432","number":"\u041b\u044c\u0432\u043e\u0432 1"},{"id_gbr":50,"region":"\u041b\u044c\u0432\u043e\u0432","number":"\u041b\u044c\u0432\u043e\u0432 2"},{"id_gbr":51,"region":"\u041b\u044c\u0432\u043e\u0432","number":"\u041b\u044c\u0432\u043e\u0432 3"},{"id_gbr":52,"region":"\u041b\u044c\u0432\u043e\u0432","number":"\u041b\u044c\u0432\u043e\u0432 4"},{"id_gbr":60,"region":"\u041a\u0438\u0435\u0432","number":"76"},{"id_gbr":65,"region":"\u041c\u0430\u0440\u0438\u0443\u043f\u043e\u043b\u044c","number":"\u041c\u0430\u0440\u0438\u0443\u043f\u043e\u043b\u044c-1"},{"id_gbr":66,"region":"\u041c\u0430\u0440\u0438\u0443\u043f\u043e\u043b\u044c","number":"\u041c\u0430\u0440\u0438\u0443\u043f\u043e\u043b\u044c-2"},{"id_gbr":67,"region":"\u041c\u0430\u0440\u0438\u0443\u043f\u043e\u043b\u044c","number":"\u041c\u0430\u0440\u0438\u0443\u043f\u043e\u043b\u044c-4"},{"id_gbr":72,"region":"\u041a\u0438\u0435\u0432","number":"87"},{"id_gbr":74,"region":"\u041f\u043e\u043a\u0440\u043e\u0432\u0441\u043a\u043e\u0435","number":"\u041f\u043e\u043a\u0440\u043e\u0432\u0441\u043a"},{"id_gbr":76,"region":"\u042d\u043d\u0435\u0440\u0433\u043e\u0434\u0430\u0440","number":"\u042d\u043d\u0435\u0440\u0433\u043e\u0434\u0430\u0440"},{"id_gbr":77,"region":"\u041a\u0438\u0435\u0432","number":"77"},{"id_gbr":80,"region":"\u041f\u0430\u0432\u043b\u043e\u0433\u0440\u0430\u0434","number":"\u041f\u0430\u0432\u043b\u043e\u0433\u0440\u0430\u0434 1"},{"id_gbr":81,"region":"\u041f\u0430\u0432\u043b\u043e\u0433\u0440\u0430\u0434","number":"\u041f\u0430\u0432\u043b\u043e\u0433\u0440\u0430\u0434 2"},{"id_gbr":82,"region":"\u041a\u0430\u043c\u0435\u043d\u0441\u043a","number":"\u041a\u0430\u043c\u0435\u043d\u0441\u043a 3"},{"id_gbr":83,"region":"\u041a\u0430\u043c\u0435\u043d\u0441\u043a","number":"\u041a\u0430\u043c\u0435\u043d\u0441\u043a 4"},{"id_gbr":84,"region":"\u0414\u043d\u0435\u043f\u0440","number":"\u0414\u043d\u0435\u043f\u0440 7"},{"id_gbr":85,"region":"\u0417\u0430\u043f\u043e\u0440\u043e\u0436\u044c\u0435","number":"\u0411\u0430\u0439\u043a\u0430\u043b 8"},{"id_gbr":86,"region":"\u041b\u044c\u0432\u043e\u0432","number":"\u041b\u044c\u0432\u043e\u0432 5"},{"id_gbr":88,"region":"\u041a\u0438\u0435\u0432","number":"91"},{"id_gbr":89,"region":"\u041a\u0430\u043c\u0435\u043d\u0441\u043a","number":"\u041a\u0430\u043c\u0435\u043d\u0441\u043a 5"},{"id_gbr":90,"region":"\u041c\u0430\u0440\u0438\u0443\u043f\u043e\u043b\u044c","number":"\u041c\u0430\u0440\u0438\u0443\u043f\u043e\u043b\u044c-3"},{"id_gbr":91,"region":"\u041a\u0438\u0435\u0432","number":"\u041c\u041e\u0422\u041e - 1"}]}`)
 		switch js_cmnd {
 		case "start": //First start
-
+			//	js_result = startGBR(js_iden, js_name, js_param, getSocketIndex(conn))
+			json.Unmarshal(b, &gbrlistSout)
+			//msg := []byte("Hello on Serverside!")
+			err = conn.WriteMessage(websocket.TextMessage, b)
 		case "login": //Loging for user
+				fmt.Println("In login case")
 			js_result = logGBR(js_iden, js_name, js_param, getSocketIndex(conn))
 		case "alarmlist": //Get alarm list
 			js_result = getAlarms(js_iden, js_name, js_param)
@@ -179,7 +199,7 @@ func startGBR(userid, js_name, js_param string, conPosition int) string {
 }
 
 //------------------------------------------------------------------------------
-func startGPStest(userid, js_name, js_param string, conPosition int) string {
+func loginChecker(userid, js_name, js_param string, conPosition int) string {
 
 	return ""
 }
@@ -190,13 +210,12 @@ func logGBR(userid, js_name, js_param string, conPosition int) string {
 	s_sql := "SELECT IDCONST, CONSTVALUE FROM consttable WHERE "
 	s_sql += "(CONSTVISIB = 0) AND (CONSTKIND = 4) AND (IDCONST = " + userid
 	s_sql += ") LIMIT 1"
-
-	gbr_valid := (dbGetIntData(s_sql, 0) > 0)
-
+//TODO remake valid method
+	//gbr_valid := (dbGetIntData(s_sql, 0) > 0)
 	s_sql = "SELECT IDPERS,FIOPERS,PAROL FROM personality WHERE IDPERS=" + dbQuatedString(js_name)
 	s_json := ""
 
-	if gbr_valid == false {
+	if js_name != "-1" && js_param != "-111" {
 		s_json = "{" + string(0x0D) + string(0x0A)
 		s_json = s_json + getQuatedJSON("id", userid, 1) + "," + string(0x0D) + string(0x0A)
 		s_json = s_json + getQuatedJSON("name", js_name, 1) + "," + string(0x0D) + string(0x0A)
