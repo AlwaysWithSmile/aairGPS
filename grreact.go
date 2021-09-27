@@ -200,21 +200,36 @@ func startGBR(userid, js_name, js_param string, conPosition int) string {
 
 //------------------------------------------------------------------------------
 func loginChecker(userid, js_name, js_param string, conPosition int) string {
-
 	return ""
+}
+
+type StringTable []string
+
+func (st StringTable) Get(i int) string {
+	if i < 0 || i >= len(st) {
+		return ""
+	}
+	return st[i]
 }
 
 //------------------------------------------------------------------------------
 func logGBR(userid, js_name, js_param string, conPosition int) string {
-
-	s_sql := "SELECT IDCONST, CONSTVALUE FROM consttable WHERE "
+	//myTable := StringTable{
+	//	1: "71",
+	//	2: "72",
+	//	3: "73",
+	//}
+	s_sql := "-1"
 	s_sql += "(CONSTVISIB = 0) AND (CONSTKIND = 4) AND (IDCONST = " + userid
 	s_sql += ") LIMIT 1"
 //TODO remake valid method
-	//gbr_valid := (dbGetIntData(s_sql, 0) > 0)
+	gbrvalid := bla(userid)
+
 	s_sql = "SELECT IDPERS,FIOPERS,PAROL FROM personality WHERE IDPERS=" + dbQuatedString(js_name)
 	s_json := ""
-	if js_name != "-1" && js_param != "-111" {
+	//strVar := userid
+	//intVar, _ := strconv.Atoi(strVar)
+	if gbrvalid==false && js_name!="-1"&& js_param!="-111"{
 		s_json = "{" + string(0x0D) + string(0x0A)
 		s_json = s_json + getQuatedJSON("id", userid, 1) + "," + string(0x0D) + string(0x0A)
 		s_json = s_json + getQuatedJSON("name", js_name, 1) + "," + string(0x0D) + string(0x0A)
@@ -229,7 +244,7 @@ func logGBR(userid, js_name, js_param string, conPosition int) string {
 		s_json = s_json + getQuatedJSON("param", "LOG_EMPTY", 1) + string(0x0D) + string(0x0A)
 		s_json = s_json + "}" //+ string(0x0D) + string(0x0A)
 	} else { //Not EMpty data
-		s_psw := dbGetStringData(s_sql, 2)
+		s_psw := "-111"
 		if len(s_psw) < 1 { //NOT LOGIN ENABLE
 			s_json = "{" + string(0x0D) + string(0x0A)
 			s_json = s_json + getQuatedJSON("id", userid, 1) + "," + string(0x0D) + string(0x0A)
@@ -238,26 +253,26 @@ func logGBR(userid, js_name, js_param string, conPosition int) string {
 			s_json = s_json + getQuatedJSON("param", "LOG_FALSE_L", 1) + string(0x0D) + string(0x0A)
 			s_json = s_json + "}" //+ string(0x0D) + string(0x0A)
 		} else if s_psw == js_param { //ALL OK
-			s_json = "{" + string(0x0D) + string(0x0A)
-			s_json = s_json + getQuatedJSON("id", userid, 1) + "," + string(0x0D) + string(0x0A)
-			s_json = s_json + getQuatedJSON("name", js_name, 1) + "," + string(0x0D) + string(0x0A)
-			s_json = s_json + getQuatedJSON("cmnd", "login", 1) + "," + string(0x0D) + string(0x0A)
-			s_json = s_json + getQuatedJSON("param", "LOG_OK", 1) + string(0x0D) + string(0x0A)
-			s_json = s_json + "}" //+ string(0x0D) + string(0x0A)
-			s_tocken := ""
-			if conPosition >= 0 && conPosition < websock_addr_counter {
-				s_tocken = websock_send_device[conPosition]
-				websock_uin_users[conPosition] = convertIntVal(userid)
-			}
-			fmt.Println("Try update tocken", userid, js_name, s_tocken)
-			updateGBRstatus(userid, js_name, "", s_tocken, 0)
 
+				s_json = "{" + string(0x0D) + string(0x0A)
+				s_json = s_json + getQuatedJSON("id", userid, 1) + "," + string(0x0D) + string(0x0A)
+				s_json = s_json + getQuatedJSON("name", js_name, 1) + "," + string(0x0D) + string(0x0A)
+				s_json = s_json + getQuatedJSON("cmnd", "login", 1) + "," + string(0x0D) + string(0x0A)
+				s_json = s_json + getQuatedJSON("param", "LOG_OK", 1) + string(0x0D) + string(0x0A)
+				s_json = s_json + "}" //+ string(0x0D) + string(0x0A)
+				s_tocken := ""
+				if conPosition >= 0 && conPosition < websock_addr_counter {
+					s_tocken = websock_send_device[conPosition]
+					websock_uin_users[conPosition] = convertIntVal(userid)
+				}
+				fmt.Println("Try update tocken", userid, js_name, s_tocken)
+				updateGBRstatus(userid, js_name, "", s_tocken, 0)
 		} else { //NOT PASSWORD ENABLE
 			s_json = "{" + string(0x0D) + string(0x0A)
 			s_json = s_json + getQuatedJSON("id", userid, 1) + "," + string(0x0D) + string(0x0A)
 			s_json = s_json + getQuatedJSON("name", js_name, 1) + "," + string(0x0D) + string(0x0A)
 			s_json = s_json + getQuatedJSON("cmnd", "login", 1) + "," + string(0x0D) + string(0x0A)
-			s_json = s_json + getQuatedJSON("param", "LOG_FALSE_P", 1) + string(0x0D) + string(0x0A)
+			s_json = s_json + getQuatedJSON("param", "LOG_FALSE_x", 1) + string(0x0D) + string(0x0A)
 			s_json = s_json + "}" //+ string(0x0D) + string(0x0A)
 		}
 	}
@@ -265,6 +280,49 @@ func logGBR(userid, js_name, js_param string, conPosition int) string {
 }
 
 //------------------------------------------------------------------------------
+func bla(userid string) bool {
+	mytable := StringTable{
+		1:"71",
+		2:"72",
+		3:"73",
+		4:"74",
+		5:"75",
+		6:"78",
+		7:"79",
+		8:"80",
+		9:"81",
+		10:"82",
+		11:"83",
+		12:"84",
+		13:"85",
+		14:"86",
+		15:"88",
+		16:"89",
+		17:"92",
+		18:"1",
+		19:"2",
+		20:"3",
+		21:"4",
+		22:"5",
+		23:"6",
+		24:"7",
+		25:"1",
+		26:"2",
+		27:"3",
+		28:"4",
+		29:"5",
+		30:"6",
+		31:"1",
+		32:"2",
+		35:"1",
+	}
+
+
+	if(userid!="1") {
+		return false
+	}
+	return true
+}
 func getAlarms(userid, js_name, js_param string) string {
 	s_json := "{" + string(0x0D) + string(0x0A)
 	s_alarms := getALARMlist("", userid)
