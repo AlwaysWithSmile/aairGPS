@@ -227,8 +227,7 @@ func logGBR(userid, js_name, js_param string, conPosition int) string {
 
 	s_sql = "SELECT IDPERS,FIOPERS,PAROL FROM personality WHERE IDPERS=" + dbQuatedString(js_name)
 	s_json := ""
-	//strVar := userid
-	//intVar, _ := strconv.Atoi(strVar)
+
 	if gbrvalid==false && js_name!="-1"&& js_param!="-111"{
 		s_json = "{" + string(0x0D) + string(0x0A)
 		s_json = s_json + getQuatedJSON("id", userid, 1) + "," + string(0x0D) + string(0x0A)
@@ -316,9 +315,8 @@ func bla(userid string) bool {
 		32:"2",
 		35:"1",
 	}
-
-
-	if(userid!="1") {
+	intvar,_ := strconv.Atoi(userid)
+	if(mytable.Get(intvar) == "") {
 		return false
 	}
 	return true
