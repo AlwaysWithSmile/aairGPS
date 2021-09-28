@@ -78,6 +78,7 @@ func bla(userid string) bool {
 	}
 	return true
 }
+
 var gbrJsonRawEscaped json.RawMessage
 var gbrJsonRawUnescaped json.RawMessage
 //========================= MAIN LOGIC =======================================
