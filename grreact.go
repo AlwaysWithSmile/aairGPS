@@ -30,8 +30,31 @@ type AppSend struct{
 	Command string `json:"cmnd"`
 	ID string `json:"id"`
 }
+type equalsNumandGbrid struct {
+	Id_workings int `json:"id_workings"`
+	ObjectNumberPult string `json:"f_object_number_pult"`
+	ObjectAdress string `json:"f_object_adress"`
+	ObjectName string `json:"f_object_name"`
+	Region string `json:"f_region"`
+	GbrNumber string `json:"f_gbr_number"`
+	GbrNumberRezerv string `json:"f_gbr_number_rezerv"`
+	IdGBR string `json:"id_gbr"`
+}
 
 //========================= get JSON func =======================================
+type StringTable []string
+
+func(st StringTable) Get(i int) string{
+	if i < 0 || i > len(st){
+		return ""
+	}
+	return st[i]
+}
+
+func(st StringTable) GetIndex(i int) int{
+	return i
+}
+
 func getJSON(url string, target interface{})error{
 	return json.NewDecoder(bytes.NewBufferString(url)).Decode(target)
 }
@@ -78,6 +101,8 @@ func bla(userid string) bool {
 	}
 	return true
 }
+
+
 
 var gbrJsonRawEscaped json.RawMessage
 var gbrJsonRawUnescaped json.RawMessage
@@ -127,8 +152,64 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 		case "login": //Loging for user
 				fmt.Println("In login case")
 			js_result = logGBR(js_iden, js_name, js_param, getSocketIndex(conn))
-		case "alarmlist": //Get alarm list
-			js_result = getAlarms(js_iden, js_name, js_param)
+
+	/*	case "activeworkers":
+			jsonData := []byte(`{
+	"id_workings":245115,
+	"f_object_number_pult":"89",
+	"f_object_adress":"\u0433. \u041a\u0438\u0435\u0432, \u0443\u043b. \u041c\u0438\u0440\u043e\u043f\u043e\u043b\u044c\u0441\u043a\u0430\u044f, 1",
+	"f_object_name":"\u0422\u041f 2594",
+	"f_region":"\u041a\u0438\u0435\u0432",
+	"f_gbr_number":"80",
+	"f_gbr_number_rezerv":"",
+	"id_gbr":"8"
+}`)
+			mytable := StringTable{
+				1:"71",
+				2:"72",
+				3:"73",
+				4:"74",
+				5:"75",
+				6:"78",
+				7:"79",
+				8:"80",
+				9:"81",
+				10:"82",
+				11:"83",
+				12:"84",
+				13:"85",
+				14:"86",
+				15:"88",
+				16:"89",
+				17:"92",
+				18:"1",
+				19:"2",
+				20:"3",
+				21:"4",
+				22:"5",
+				23:"6",
+				24:"7",
+				25:"1",
+				26:"2",
+				27:"3",
+				28:"4",
+				29:"5",
+				30:"6",
+				31:"1",
+				32:"2",
+				35:"1",
+			}
+			fmt.Println(js_iden)
+			message := []byte("Can't Connect to case activeworkers ")
+			convertInt, _ := strconv.Atoi(js_iden)
+			if(convertInt == mytable.GetIndex(convertInt)){
+				conn.WriteJSON(jsonData)
+				fmt.Println(jsonData)
+			}else{
+				conn.WriteMessage(websocket.TextMessage,message )
+			}*/
+	//	case "alarmlist": //Get alarm list
+	//		js_result = getAlarms(js_iden, js_name, js_param)
 		case "alarmget": //Receive alarm
 			js_result = recAlarms(js_iden, js_cmnd, js_name, js_param)
 		case "alarmstart": //GBR starts trip
@@ -239,22 +320,31 @@ func loginChecker(userid, js_name, js_param string, conPosition int) string {
 	return ""
 }
 
-type StringTable []string
-
-func (st StringTable) Get(i int) string {
-	if i < 0 || i >= len(st) {
-		return ""
-	}
-	return st[i]
-}
 
 //------------------------------------------------------------------------------
 func logGBR(userid, js_name, js_param string, conPosition int) string {
-	//myTable := StringTable{
-	//	1: "71",
-	//	2: "72",
-	//	3: "73",
-	//}
+	/*myTable := StringTable{
+		1:"71",
+		2:"72",
+		3:"73",
+		8:"78",
+	}*/
+
+
+	jsonData := []byte(`{
+	"id_workings":245115,
+	"f_object_number_pult":"89",
+	"f_object_adress":"\u0433. \u041a\u0438\u0435\u0432, \u0443\u043b. \u041c\u0438\u0440\u043e\u043f\u043e\u043b\u044c\u0441\u043a\u0430\u044f, 1",
+	"f_object_name":"\u0422\u041f 2594",
+	"f_region":"\u041a\u0438\u0435\u0432",
+	"f_gbr_number":"80",
+	"f_gbr_number_rezerv":"",
+	"id_gbr":"8"
+}`)
+	var nowACtiveWorkers equalsNumandGbrid
+	if err := json.Unmarshal(jsonData, &nowACtiveWorkers); err != nil{
+		panic(err)
+	}
 	s_sql := "-1"
 	s_sql += "(CONSTVISIB = 0) AND (CONSTKIND = 4) AND (IDCONST = " + userid
 	s_sql += ") LIMIT 1"
@@ -296,6 +386,7 @@ func logGBR(userid, js_name, js_param string, conPosition int) string {
 				s_json = s_json + getQuatedJSON("param", "LOG_OK", 1) + string(0x0D) + string(0x0A)
 				s_json = s_json + "}" //+ string(0x0D) + string(0x0A)
 				s_tocken := ""
+
 				if conPosition >= 0 && conPosition < websock_addr_counter {
 					s_tocken = websock_send_device[conPosition]
 					websock_uin_users[conPosition] = convertIntVal(userid)
