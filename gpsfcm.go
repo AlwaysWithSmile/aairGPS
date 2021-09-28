@@ -69,16 +69,6 @@ func upgradeSoundTag(sound_file string) string {
 //https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/generating_a_remote_notification
 //TODO NEW PUSH REQUEST PART FROM CSHOLDING
 
-type equalsNumandGbrid struct {
-	Id_workings int `json:"id_workings"`
-	ObjectNumberPult string `json:"f_object_number_pult"`
-	ObjectAdress string `json:"f_object_adress"`
-	ObjectName string `json:"f_object_name"`
-	Region string `json:"f_region"`
-	GbrNumber string `json:"f_gbr_number"`
-	GbrNumberRezerv string `json:"f_gbr_number_rezerv"`
-	IdGBR string `json:"id_gbr"`
-}
 //----------------------------------------------------------------
 func getTokenList(fmc_Token, fmc_Title, fmc_Body string, fmc_category int) bool {
 	var (
