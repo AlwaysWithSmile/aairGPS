@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"strings"
 	"time"
 
 	//	"math/rand"
@@ -37,12 +36,47 @@ func getJSON(url string, target interface{})error{
 	return json.NewDecoder(bytes.NewBufferString(url)).Decode(target)
 }
 
-func _UnescapeUnicodeCharactersInJSON(_jsonRaw json.RawMessage)(json.RawMessage, error){
-	str, err := strconv.Unquote(strings.Replace(strconv.Quote(string(_jsonRaw)),`\\u`,`\u`,-1))
-	if err != nil {
-		panic(err)
+func bla(userid string) bool {
+	mytable := StringTable{
+		1:"71",
+		2:"72",
+		3:"73",
+		4:"74",
+		5:"75",
+		6:"78",
+		7:"79",
+		8:"80",
+		9:"81",
+		10:"82",
+		11:"83",
+		12:"84",
+		13:"85",
+		14:"86",
+		15:"88",
+		16:"89",
+		17:"92",
+		18:"1",
+		19:"2",
+		20:"3",
+		21:"4",
+		22:"5",
+		23:"6",
+		24:"7",
+		25:"1",
+		26:"2",
+		27:"3",
+		28:"4",
+		29:"5",
+		30:"6",
+		31:"1",
+		32:"2",
+		35:"1",
 	}
-	return []byte(str), nil
+	intvar,_ := strconv.Atoi(userid)
+	if(mytable.Get(intvar) == "") {
+		return false
+	}
+	return true
 }
 var gbrJsonRawEscaped json.RawMessage
 var gbrJsonRawUnescaped json.RawMessage
@@ -279,48 +313,7 @@ func logGBR(userid, js_name, js_param string, conPosition int) string {
 }
 
 //------------------------------------------------------------------------------
-func bla(userid string) bool {
-	mytable := StringTable{
-		1:"71",
-		2:"72",
-		3:"73",
-		4:"74",
-		5:"75",
-		6:"78",
-		7:"79",
-		8:"80",
-		9:"81",
-		10:"82",
-		11:"83",
-		12:"84",
-		13:"85",
-		14:"86",
-		15:"88",
-		16:"89",
-		17:"92",
-		18:"1",
-		19:"2",
-		20:"3",
-		21:"4",
-		22:"5",
-		23:"6",
-		24:"7",
-		25:"1",
-		26:"2",
-		27:"3",
-		28:"4",
-		29:"5",
-		30:"6",
-		31:"1",
-		32:"2",
-		35:"1",
-	}
-	intvar,_ := strconv.Atoi(userid)
-	if(mytable.Get(intvar) == "") {
-		return false
-	}
-	return true
-}
+
 func getAlarms(userid, js_name, js_param string) string {
 	s_json := "{" + string(0x0D) + string(0x0A)
 	s_alarms := getALARMlist("", userid)
