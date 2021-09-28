@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	//	"encoding/json"
 	"fmt"
 
@@ -66,6 +67,19 @@ func upgradeSoundTag(sound_file string) string {
 
 //https://github.com/NaySoftware/go-fcm
 //https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/generating_a_remote_notification
+//TODO NEW PUSH REQUEST PART FROM CSHOLDING
+
+type equalsNumandGbrid struct {
+	Id_workings int `json:"id_workings"`
+	ObjectNumberPult string `json:"f_object_number_pult"`
+	ObjectAdress string `json:"f_object_adress"`
+	ObjectName string `json:"f_object_name"`
+	Region string `json:"f_region"`
+	GbrNumber string `json:"f_gbr_number"`
+	GbrNumberRezerv string `json:"f_gbr_number_rezerv"`
+	IdGBR string `json:"id_gbr"`
+}
+//----------------------------------------------------------------
 func getTokenList(fmc_Token, fmc_Title, fmc_Body string, fmc_category int) bool {
 	var (
 		send_Result bool
@@ -135,7 +149,22 @@ func getTokenList(fmc_Token, fmc_Title, fmc_Body string, fmc_category int) bool 
 	//c.SubscribeToTopic("sound", "alert")
 
 	status, err := c.Send()
-
+//TODO NEW PUSH REQUEST PART FROM CSHOLDING
+	jsonData := []byte(`{
+	"id_workings":245115,
+	"f_object_number_pult":"89",
+	"f_object_adress":"\u0433. \u041a\u0438\u0435\u0432, \u0443\u043b. \u041c\u0438\u0440\u043e\u043f\u043e\u043b\u044c\u0441\u043a\u0430\u044f, 1",
+	"f_object_name":"\u0422\u041f 2594",
+	"f_region":"\u041a\u0438\u0435\u0432",
+	"f_gbr_number":"80",
+	"f_gbr_number_rezerv":"",
+	"id_gbr":"8"
+}`)
+	var nowActiveWorkers equalsNumandGbrid
+	if err := json.Unmarshal(jsonData, &nowActiveWorkers); err != nil{
+		panic(err)
+	}
+//----------------------------------------------------------------
 	if err == nil {
 		fmt.Println(getDT(), "Send Push to tocken", fmc_Token)
 		if status.Success == 1 {
