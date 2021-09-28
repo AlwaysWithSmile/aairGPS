@@ -208,8 +208,8 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 			}else{
 				conn.WriteMessage(websocket.TextMessage,message )
 			}*/
-	//	case "alarmlist": //Get alarm list
-	//		js_result = getAlarms(js_iden, js_name, js_param)
+		case "alarmlist": //Get alarm list
+			js_result = getAlarms(js_iden, js_name, js_param)
 		case "alarmget": //Receive alarm
 			js_result = recAlarms(js_iden, js_cmnd, js_name, js_param)
 		case "alarmstart": //GBR starts trip
@@ -322,29 +322,17 @@ func loginChecker(userid, js_name, js_param string, conPosition int) string {
 
 
 //------------------------------------------------------------------------------
+var upgrader = websocket.Upgrader{
+	ReadBufferSize: 1024,
+	WriteBufferSize: 1024,
+}
+//func handler(w http.ResponseWriter, r *http.Request){
+// if  conn, err := upgrader.Upgrade(w,r,nil); err != nil {
+//	 panic(err)
+//	 }
+//}
 func logGBR(userid, js_name, js_param string, conPosition int) string {
-	/*myTable := StringTable{
-		1:"71",
-		2:"72",
-		3:"73",
-		8:"78",
-	}*/
 
-
-	jsonData := []byte(`{
-	"id_workings":245115,
-	"f_object_number_pult":"89",
-	"f_object_adress":"\u0433. \u041a\u0438\u0435\u0432, \u0443\u043b. \u041c\u0438\u0440\u043e\u043f\u043e\u043b\u044c\u0441\u043a\u0430\u044f, 1",
-	"f_object_name":"\u0422\u041f 2594",
-	"f_region":"\u041a\u0438\u0435\u0432",
-	"f_gbr_number":"80",
-	"f_gbr_number_rezerv":"",
-	"id_gbr":"8"
-}`)
-	var nowACtiveWorkers equalsNumandGbrid
-	if err := json.Unmarshal(jsonData, &nowACtiveWorkers); err != nil{
-		panic(err)
-	}
 	s_sql := "-1"
 	s_sql += "(CONSTVISIB = 0) AND (CONSTKIND = 4) AND (IDCONST = " + userid
 	s_sql += ") LIMIT 1"
@@ -387,7 +375,8 @@ func logGBR(userid, js_name, js_param string, conPosition int) string {
 				s_json = s_json + "}" //+ string(0x0D) + string(0x0A)
 				s_tocken := ""
 
-				if conPosition >= 0 && conPosition < websock_addr_counter {
+
+			if conPosition >= 0 && conPosition < websock_addr_counter {
 					s_tocken = websock_send_device[conPosition]
 					websock_uin_users[conPosition] = convertIntVal(userid)
 				}
@@ -408,24 +397,29 @@ func logGBR(userid, js_name, js_param string, conPosition int) string {
 //------------------------------------------------------------------------------
 
 func getAlarms(userid, js_name, js_param string) string {
-	s_json := "{" + string(0x0D) + string(0x0A)
-	s_alarms := getALARMlist("", userid)
-	if len(s_alarms) > 10 {
-		s_json += getQuatedJSON("alarmlist", "[", 0) + string(0x0D) + string(0x0A)
-		s_json += s_alarms
-		s_json += "]" + string(0x0D) + string(0x0A)
-		s_json += "}" + string(0x0D) + string(0x0A)
-		s_json = doReplaceStr(s_json, "},]", "}]")
-	} else {
-		s_json = "{" + string(0x0D) + string(0x0A)
-		s_json = s_json + getQuatedJSON("id", userid, 1) + "," + string(0x0D) + string(0x0A)
-		s_json = s_json + getQuatedJSON("name", js_name, 1) + "," + string(0x0D) + string(0x0A)
-		s_json = s_json + getQuatedJSON("cmnd", "alarmlist", 1) + "," + string(0x0D) + string(0x0A)
-		s_json = s_json + getQuatedJSON("param", "Status empty", 1) + string(0x0D) + string(0x0A)
-		s_json = s_json + "}" + string(0x0D) + string(0x0A)
-	}
+	/*myTable := StringTable{
+		1:"71",
+		2:"72",
+		3:"73",
+		8:"78",
+	}*/
 
-	return s_json
+	jsonData := []byte(`{
+	"id_workings":245115,
+	"f_object_number_pult":"89",
+	"f_object_adress":"\u0433. \u041a\u0438\u0435\u0432, \u0443\u043b. \u041c\u0438\u0440\u043e\u043f\u043e\u043b\u044c\u0441\u043a\u0430\u044f, 1",
+	"f_object_name":"\u0422\u041f 2594",
+	"f_region":"\u041a\u0438\u0435\u0432",
+	"f_gbr_number":"80",
+	"f_gbr_number_rezerv":"",
+	"id_gbr":"8"
+}`)
+	var nowActiveWorkers equalsNumandGbrid
+	if err := json.Unmarshal(jsonData, &nowActiveWorkers); err != nil{
+		panic(err)
+	}
+	workingJson := "{" + nowActiveWorkers.IdGBR + nowActiveWorkers.GbrNumber + nowActiveWorkers.ObjectNumberPult + nowActiveWorkers.ObjectName + nowActiveWorkers.ObjectAdress + "}"
+	return workingJson
 }
 
 //------------------------------------------------------------------------------
