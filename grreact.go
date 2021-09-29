@@ -30,16 +30,7 @@ type AppSend struct{
 	Command string `json:"cmnd"`
 	ID string `json:"id"`
 }
-type equalsNumandGbrid struct {
-	Id_workings int `json:"id_workings"`
-	ObjectNumberPult string `json:"f_object_number_pult"`
-	ObjectAdress string `json:"f_object_adress"`
-	ObjectName string `json:"f_object_name"`
-	Region string `json:"f_region"`
-	GbrNumber string `json:"f_gbr_number"`
-	GbrNumberRezerv string `json:"f_gbr_number_rezerv"`
-	IdGBR string `json:"id_gbr"`
-}
+
 
 //========================= get JSON func =======================================
 type StringTable []string
@@ -394,11 +385,50 @@ func logGBR(userid, js_name, js_param string, conPosition int) string {
 	return s_json
 }
 
+//TODO testing getAlarmListMethod
+type equalsNumandGbrid struct {
+	Id_workings int `json:"id_workings"`
+	ObjectNumberPult string `json:"f_object_number_pult"`
+	ObjectAdress string `json:"f_object_adress"`
+	ObjectName string `json:"f_object_name"`
+	Region string `json:"f_region"`
+	GbrNumber string `json:"f_gbr_number"`
+	GbrNumberRezerv string `json:"f_gbr_number_rezerv"`
+	IdGBR string `json:"id_gbr"`
+}
+func getAlarmListTest(objectid string, userid string) string{
+	jsonData := []byte(`{
+	"id_workings":245115,
+	"f_object_number_pult":"89",
+	"f_object_adress":"\u0433. \u041a\u0438\u0435\u0432, \u0443\u043b. \u041c\u0438\u0440\u043e\u043f\u043e\u043b\u044c\u0441\u043a\u0430\u044f, 1",
+	"f_object_name":"\u0422\u041f 2594",
+	"f_region":"\u041a\u0438\u0435\u0432",
+	"f_gbr_number":"80",
+	"f_gbr_number_rezerv":"",
+	"id_gbr":"8"
+}`)
+	var nowActiveWorkers equalsNumandGbrid
+	sout_json := "{"
+	if err := json.Unmarshal(jsonData, &nowActiveWorkers); err != nil{
+		panic(err)
+	}
+	myTable := StringTable{
+		8:"78",
+	}
+	convertedobjectId, _ := strconv.Atoi(objectid)
+	converteduserId, _ := strconv.Atoi(userid)
+	if convertedobjectId != myTable.GetIndex(converteduserId) && converteduserId != convertedobjectId {
+		return ""
+	}else{
+	sout_json += "id_gbr" + nowActiveWorkers.IdGBR + "," + "f_gbr_number" + nowActiveWorkers.GbrNumber
+	}
+	return sout_json
+}
 //------------------------------------------------------------------------------
 
 func getAlarms(userid, js_name, js_param string) string {
 	s_json := "{" + string(0x0D) + string(0x0A)
-	s_alarms := getALARMlist("", userid)
+	s_alarms := getAlarmListTest("8", userid)
 	if len(s_alarms) > 10 {
 		s_json += getQuatedJSON("alarmlist", "[", 0) + string(0x0D) + string(0x0A)
 		s_json += s_alarms
