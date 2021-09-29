@@ -12,6 +12,61 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+type CardBase struct {
+	ID                       int    `json:"id"`
+	CARD_TYPE                int    `json:"type_object_cart"`
+	CARD_AFFILATION          int    `json:"affiliation"`
+	CARD_INSTALLER           int    `json:"installer"`
+	CARD_CLIENT              string `json:"field_client"`
+	CARD_PULTNUM             string `json:"field_pult_number"`
+	CARD_RADIO_CHANEL        string `json:"field_radio_chanel"`
+	CARD_RADIO_CHANEL_RESERV string `json:"field_radio_chanel_rezerv"`
+	CARD_REGION              string `json:"field_region"`
+	CARD_PEREZVON            string `json:"perezvon"`
+	CARD_GBR_ACTION          int    `json:"gbr_action"`
+	CARD_CALL                string `json:"field_call"`
+	CARD_CALL_RESERV         string `json:"field_call_rezerv"`
+	CARD_CALL_RESERV2        string `json:"field_call_rezerv2"`
+	CARD_TIME_RESPONSE       string `json:"field_time_response"`
+	CARD_CONTROL_PANEL       string `json:"field_contol_panel"`
+	CARD_COMPANY             int    `json:"field_company"`
+	CARD_ALIENT_PULT         int    `json:"field_alien_pult"`
+	CARD_NAME                string `json:"field_name"`
+	CARD_ADRES               string `json:"field_adress"`
+	CARD_MODE                string `json:"field_mode"`
+	CARD_TYPE_OBJECT         string `json:"field_type_object"`
+	CARD_EXTRACT_ADDRESS     string `json:"exact_address"`
+	CARD_STOREYS             string `json:"storeys"`
+	CARD_FLOOR               string `json:"floor"`
+	CARD_KEY_PRESENT         string `json:"key_availability"`
+	CARD_HAVE_DOG            string `json:"having_dog"`
+	CARD_OUT_INTO            string `json:"build_out_or_into"`
+	CARD_WINDOW_DOOR         string `json:"window_and_dor"`
+	CARD_SECURITY            string `json:"security_in_object"`
+	CARD_WAYMARK             string `json:"waymark"`
+	CARD_PORCH               string `json:"field_porch"`
+	CARD_VULNER              string `json:"field_vulnerabilities"`
+	CARD_INFO2               string `json:"field_description_2"`
+	CARD_EQUIP               string `json:"field_equipment"`
+	CARD_WHOSE_EQUIP         string `json:"field_whose_equipment"`
+	CARD_AUTHOR              string `json:"field_author"`
+	CARD_MANAGER             string `json:"field_manager"`
+	CARD_DOGOVOR             string `json:"field_dogovor"`
+	CARD_SUM_MONTH           string `json:"field_summ_in_month"`
+	CARD_PEOPLE              string `json:"field_people"`
+	CARD_SHLEYF              string `json:"field_shleif"`
+
+	CARD_DATE_ENTER string `json:"field_date_enter_object"`
+	CARD_START_SEC  string `json:"field_date_start_security"`
+	CARD_WARNING    string `json:"field_warning"`
+	CARD_LAT        string `json:"lat"`
+	CARD_LON        string `json:"lng"`
+
+
+	CARD_FILES []string `json:"files"`
+}
+
+
 type AirQuery struct {
 	ID    string `json:"id"`
 	Name  string `json:"name"`
@@ -170,14 +225,15 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 			if err := json.Unmarshal(jsonData, &nowActiveWorkers); err != nil{
 				panic(err)
 			}
-
-
+			cardBase := new(CardBase)
+			card_num := "123"
+			getJSON("http://api-cs.ohholding.com.ua/object_cart/"+card_num+"/get", cardBase)
 			fmt.Println("In connect case")
 			message := []byte( "{\"cmnd\":\"connect\",\"id\":\"8\",\"name\":\"-1\",\"param\":\"Connect_OK\"}" )
 			err = conn.WriteMessage(websocket.TextMessage, message)
 		//	testMessage := []byte("{" + "id_gbr:"+nowActiveWorkers.IdGBR+ "," + "gbr_number:" +nowActiveWorkers.GbrNumber + "}")
 		//	conn.WriteMessage(websocket.TextMessage, testMessage)
-		conn.WriteJSON(nowActiveWorkers)
+		conn.WriteJSON(cardBase)
 			//	case "alarmlist": //Get alarm list
 	//		js_result = getAlarms(js_iden, js_name, js_param)
 		case "alarmget": //Receive alarm
