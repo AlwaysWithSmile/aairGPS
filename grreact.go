@@ -278,7 +278,8 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 			s_json += "imagelist" +":" + "[" + "https:\\/\\/cs.ohholding.com.ua\\/view\\/object_cart\\/uploads\\/7761\\/Screenshot_4.jpg" +"}" + "]"
 			s_json += "}"
 			fmt.Println(s_json)
-			conn.WriteJSON(s_json)
+			s_jsonbyte := []byte(s_json)
+			conn.WriteMessage(websocket.TextMessage, s_jsonbyte)
 			//	case "alarmlist": //Get alarm list
 	//		js_result = getAlarms(js_iden, js_name, js_param)
 		case "alarmget": //Receive alarm
