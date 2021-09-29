@@ -267,15 +267,15 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 			fmt.Println("Successfully connected....")
 			s := string(34)
 			convertedCardBaseID := strconv.Itoa(cardBase.ID)
-			s_json := "{"+ s +"obinfo"+ s +":" +"[" +"{" + s+"id"+ s +":"+ s + convertedCardBaseID + s + "," + s +"lat" + s  +":"+ s + cardBase.CARD_LAT + s +"," + s + "lon"+ s +":" + s + cardBase.CARD_LON + s +"," + s +"obadr"+ s +":" + s +cardBase.CARD_ADRES+ s +","+ s +"obname"+ s +":" + s +cardBase.CARD_NAME+ s +"," + s +"obtel"+ s +":" + s +""+ s + "," + s + "pult" + s + ":"+ s + cardBase.CARD_PULTNUM+ s +","+ s +"status"+ s +":" + s +""+ s +"}" +"]"
+			s_json := "{" + s + "obinfo" + s + ":" + "[" + "{" + s + "id" + s + ":" + s + convertedCardBaseID + s + "," + s +"lat" + s  +":"+ s + cardBase.CARD_LAT + s +"," + s + "lon"+ s +":" + s + cardBase.CARD_LON + s +"," + s +"obadr"+ s +":" + s +cardBase.CARD_ADRES+ s +","+ s +"obname"+ s +":" + s +cardBase.CARD_NAME+ s +"," + s +"obtel"+ s +":" + s +""+ s + "," + s + "pult" + s + ":"+ s + cardBase.CARD_PULTNUM+ s +","+ s +"status"+ s +":" + s +""+ s +"}" +"]"
 			s_json += ","
-			s_json += "userlist"+":"+"["+"{"+"name"+":"+people.MAN_NAME +","+"num"+":"+people.MAN_NUM+","+"tel"+":"+people.MAN_PHONE+"}"+"]"
+			s_json += s + "userlist" + s + ":" + "[" + "{" + s + "name" + s + ":"+ s + people.MAN_NAME + s + "," + "num" + ":" + s + people.MAN_NUM + s + "," + s + "tel" + s + ":" + s + people.MAN_PHONE + s + "}"+"]"
 			s_json += ","
-			s_json += "zonelist" +":"+"["+"{"+"name"+":"+zone.ZONE_NAME+","+"num"+":"+zone.ZONE_NUM+","+"tel"+":"+zone.ZONE_PLACE+"}"+"]"
+			s_json += s + "zonelist" + s + ":"+"["+"{" + s + "name" + s + ":" + s + zone.ZONE_NAME + s + "," + s + "num" + s + ":" + s + zone.ZONE_NUM + s + "," + s + "tel" + s + ":" + s + zone.ZONE_PLACE + s + "}"+"]"
 			s_json +=","
-			s_json += "eventlist" + "[" + "]"
+			s_json += s + "eventlist" + s + ":" + "[" +"{"+"}"+ "]"
 			s_json += ","
-			s_json += "imagelist" +":" + "[" + "https:\\/\\/cs.ohholding.com.ua\\/view\\/object_cart\\/uploads\\/7761\\/Screenshot_4.jpg" +"}" + "]"
+			s_json += s + "imagelist" + s + ":" + "[" + "{" + s + "url" + s + ":"+ s + "https://cs.ohholding.com.ua/view/object_cart/uploads/7761/Screenshot_4.jpg" + s + "}" + "]"
 			s_json += "}"
 			fmt.Println(s_json)
 			s_jsonbyte := []byte(s_json)
