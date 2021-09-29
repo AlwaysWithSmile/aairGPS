@@ -405,6 +405,7 @@ func checkGBRneed(uinOBJ, uinGBR string) bool {
 	return resultat
 }
 
+
 //------------------------------------------------------------------------------
 func getALARMlist(objectIden, gbrUIN string) string {
 	s_sql := ""
