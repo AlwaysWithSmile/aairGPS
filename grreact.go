@@ -31,6 +31,17 @@ type AppSend struct{
 	ID string `json:"id"`
 }
 
+type equalsNumandGbrid struct {
+	Id_workings int `json:"id_workings"`
+	ObjectNumberPult string `json:"f_object_number_pult"`
+	ObjectAdress string `json:"f_object_adress"`
+	ObjectName string `json:"f_object_name"`
+	Region string `json:"f_region"`
+	GbrNumber string `json:"f_gbr_number"`
+	GbrNumberRezerv string `json:"f_gbr_number_rezerv"`
+	IdGBR string `json:"id_gbr"`
+}
+
 
 //========================= get JSON func =======================================
 type StringTable []string
@@ -144,10 +155,30 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 		//		fmt.Println("In login case")
 			js_result = logGBR(js_iden, js_name, js_param, getSocketIndex(conn))
 		case "connect":
+
+			jsonData := []byte(`{
+	"id_workings":245115,
+	"f_object_number_pult":"89",
+	"f_object_adress":"\u0433. \u041a\u0438\u0435\u0432, \u0443\u043b. \u041c\u0438\u0440\u043e\u043f\u043e\u043b\u044c\u0441\u043a\u0430\u044f, 1",
+	"f_object_name":"\u0422\u041f 2594",
+	"f_region":"\u041a\u0438\u0435\u0432",
+	"f_gbr_number":"80",
+	"f_gbr_number_rezerv":"",
+	"id_gbr":"8"
+}`)
+			var nowActiveWorkers equalsNumandGbrid
+			if err := json.Unmarshal(jsonData, &nowActiveWorkers); err != nil{
+				panic(err)
+			}
+
+
 			fmt.Println("In connect case")
 			message := []byte( "{\"cmnd\":\"connect\",\"id\":\"8\",\"name\":\"-1\",\"param\":\"Connect_OK\"}" )
 			err = conn.WriteMessage(websocket.TextMessage, message)
-	//	case "alarmlist": //Get alarm list
+		//	testMessage := []byte("{" + "id_gbr:"+nowActiveWorkers.IdGBR+ "," + "gbr_number:" +nowActiveWorkers.GbrNumber + "}")
+		//	conn.WriteMessage(websocket.TextMessage, testMessage)
+		conn.WriteJSON(nowActiveWorkers)
+			//	case "alarmlist": //Get alarm list
 	//		js_result = getAlarms(js_iden, js_name, js_param)
 		case "alarmget": //Receive alarm
 			js_result = recAlarms(js_iden, js_cmnd, js_name, js_param)
@@ -334,33 +365,10 @@ func logGBR(userid, js_name, js_param string, conPosition int) string {
 }
 
 //TODO testing getAlarmListMethod
-type equalsNumandGbrid struct {
-	Id_workings int `json:"id_workings"`
-	ObjectNumberPult string `json:"f_object_number_pult"`
-	ObjectAdress string `json:"f_object_adress"`
-	ObjectName string `json:"f_object_name"`
-	Region string `json:"f_region"`
-	GbrNumber string `json:"f_gbr_number"`
-	GbrNumberRezerv string `json:"f_gbr_number_rezerv"`
-	IdGBR string `json:"id_gbr"`
-}
-func getAlarmListTest(objectid string, userid string) string{
-	jsonData := []byte(`{
-	"id_workings":245115,
-	"f_object_number_pult":"89",
-	"f_object_adress":"\u0433. \u041a\u0438\u0435\u0432, \u0443\u043b. \u041c\u0438\u0440\u043e\u043f\u043e\u043b\u044c\u0441\u043a\u0430\u044f, 1",
-	"f_object_name":"\u0422\u041f 2594",
-	"f_region":"\u041a\u0438\u0435\u0432",
-	"f_gbr_number":"80",
-	"f_gbr_number_rezerv":"",
-	"id_gbr":"8"
-}`)
-	var nowActiveWorkers equalsNumandGbrid
-	sout_json := "{"
-	if err := json.Unmarshal(jsonData, &nowActiveWorkers); err != nil{
-		panic(err)
-	}
-	myTable := StringTable{
+
+/*func getAlarmListTest(objectid string, userid string) string{
+
+/*	myTable := StringTable{
 		8:"78",
 	}
 	convertedobjectId, _ := strconv.Atoi(objectid)
@@ -371,12 +379,12 @@ func getAlarmListTest(objectid string, userid string) string{
 	sout_json += "id_gbr" + nowActiveWorkers.IdGBR + "," + "f_gbr_number" + nowActiveWorkers.GbrNumber
 	}
 	return sout_json
-}
+}*/
 //------------------------------------------------------------------------------
 
 func getAlarms(userid, js_name, js_param string) string {
 	s_json := "{" + string(0x0D) + string(0x0A)
-	s_alarms := getAlarmListTest("8", userid)
+	s_alarms := getALARMlist("8", userid)
 	if len(s_alarms) > 10 {
 		s_json += getQuatedJSON("alarmlist", "[", 0) + string(0x0D) + string(0x0A)
 		s_json += s_alarms
