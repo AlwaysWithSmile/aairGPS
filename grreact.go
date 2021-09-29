@@ -265,8 +265,9 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
    "field_shleif_place":"\\u0420\\u0423-0,4 (\\u0421\\u0420\\u041f-600)"
 }`, &zone)
 			fmt.Println("Successfully connected....")
+			s := string(34)
 			convertedCardBaseID := strconv.Itoa(cardBase.ID)
-			s_json := "{"+"obinfo"+":" +"[" +"{" + "id"+":"+convertedCardBaseID+ "," + "lat" +":" +cardBase.CARD_LAT +"," + "lon" +":" + cardBase.CARD_LON + "," + "obadr" +":" + cardBase.CARD_ADRES +","+ "obname" +":" + cardBase.CARD_NAME +"," + "obtel"+":" +"" + "," +"pult"+":" +cardBase.CARD_PULTNUM +","+ "status"+":" + "" +"}" +"]"
+			s_json := "{"+ s +"obinfo"+ s +":" +"[" +"{" + s+"id"+ s +":"+ s + convertedCardBaseID + s + "," + s +"lat" + s  +":"+ s + cardBase.CARD_LAT + s +"," + s + "lon"+ s +":" + s + cardBase.CARD_LON + s +"," + s +"obadr"+ s +":" + s +cardBase.CARD_ADRES+ s +","+ s +"obname"+ s +":" + s +cardBase.CARD_NAME+ s +"," + s +"obtel"+ s +":" + s +""+ s + "," + s + "pult" + s + ":"+ s + cardBase.CARD_PULTNUM+ s +","+ s +"status"+ s +":" + s +""+ s +"}" +"]"
 			s_json += ","
 			s_json += "userlist"+":"+"["+"{"+"name"+":"+people.MAN_NAME +","+"num"+":"+people.MAN_NUM+","+"tel"+":"+people.MAN_PHONE+"}"+"]"
 			s_json += ","
