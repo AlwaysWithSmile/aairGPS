@@ -97,7 +97,24 @@ type equalsNumandGbrid struct {
 	IdGBR string `json:"id_gbr"`
 }
 
+type People struct {
+	MAN_NUM    string `json:"number_people_line"`
+	MAN_NAME   string `json:"field_people_name"`
+	MAN_ADDR   string `json:"field_adress"`
+	MAN_PHONE  string `json:"field_phone"`
+	MAN_ACCESS string `json:"field_access"`
+	MAN_NOTE   string `json:"field_note"`
 
+	Peoples []string `json:"users"`
+}
+
+type Zone struct {
+	ZONE_NUM string `json:"number_shleif_line"`
+	ZONE_NAME string `json:"field_shleif_name"`
+	ZONE_PLACE string `json:"field_shleif_place"`
+
+	Zoness []string `json:"zones"`
+}
 //========================= get JSON func =======================================
 type StringTable []string
 
@@ -231,10 +248,36 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 			fmt.Println("In connect case")
 			message := []byte( "{\"cmnd\":\"connect\",\"id\":\"8\",\"name\":\"-1\",\"param\":\"Connect_OK\"}" )
 			err = conn.WriteMessage(websocket.TextMessage, message)
+			people := new(People)
+			getJSON(`{
+   "number_people_line":"1",
+   "field_people_name":"\\u0422\\u0435\\u043b\\u0435\\u0444\\u043e\\u043d \\u0434\\u0438\\u0441\\u043f\\u0435\\u0442\\u0447\\u0435\\u0440\\u0430 ",
+   "field_adress":"",
+   "field_phone":"207-69-02, 296-79-50, 296-79-90",
+   "field_access":"",
+   "field_note":""
+}`, &people)
+
+			zone := new(Zone)
+			getJSON(`{
+"number_shleif_line":"1",
+   "field_shleif_name":"\\u0420\\u0423-0,4 (\\u0421\\u0420\\u041f-600)",
+   "field_shleif_place":"\\u0420\\u0423-0,4 (\\u0421\\u0420\\u041f-600)"
+}`, &zone)
+			fmt.Println("Successfully connected....")
 			convertedCardBaseID := strconv.Itoa(cardBase.ID)
-			testMessage := []byte("{"+"obinfo"+":" +"[" +"{" + "id:"+convertedCardBaseID+ "," + "lat:" +cardBase.CARD_LAT +"," + "lon" + cardBase.CARD_LON + "}")
-			conn.WriteMessage(websocket.TextMessage, testMessage)
-		conn.WriteJSON(cardBase)
+			s_json := "{"+"obinfo"+":" +"[" +"{" + "id"+":"+convertedCardBaseID+ "," + "lat" +":" +cardBase.CARD_LAT +"," + "lon" +":" + cardBase.CARD_LON + "," + "obadr" +":" + cardBase.CARD_ADRES +","+ "obname" +":" + cardBase.CARD_NAME +"," + "obtel"+":" +"" + "," +"pult"+":" +cardBase.CARD_PULTNUM +","+ "status"+":" + "" +"}" +"]"
+			s_json += ","
+			s_json += "userlist"+":"+"["+"{"+"name"+":"+people.MAN_NAME +","+"num"+":"+people.MAN_NUM+","+"tel"+":"+people.MAN_PHONE+"}"+"]"
+			s_json += ","
+			s_json += "zonelist" +":"+"["+"{"+"name"+":"+zone.ZONE_NAME+","+"num"+":"+zone.ZONE_NUM+","+"tel"+":"+zone.ZONE_PLACE+"}"+"]"
+			s_json +=","
+			s_json += "eventlist" + "[" + "]"
+			s_json += ","
+			s_json += "imagelist" +":" + "[" + "https:\\/\\/cs.ohholding.com.ua\\/view\\/object_cart\\/uploads\\/7761\\/Screenshot_4.jpg" +"}" + "]"
+			s_json += "}"
+			fmt.Println(s_json)
+			conn.WriteJSON(s_json)
 			//	case "alarmlist": //Get alarm list
 	//		js_result = getAlarms(js_iden, js_name, js_param)
 		case "alarmget": //Receive alarm
