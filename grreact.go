@@ -272,7 +272,7 @@ var upgrader = websocket.Upgrader{
 //}
 func logGBR(userid, js_name, js_param string, conPosition int) string {
 
-	s_sql := "-1"
+	s_sql := "-2"
 	s_sql += "(CONSTVISIB = 0) AND (CONSTKIND = 4) AND (IDCONST = " + userid
 	s_sql += ") LIMIT 1"
 //TODO remake valid method
@@ -281,7 +281,7 @@ func logGBR(userid, js_name, js_param string, conPosition int) string {
 	s_sql = "SELECT IDPERS,FIOPERS,PAROL FROM personality WHERE IDPERS=" + dbQuatedString(js_name)
 	s_json := ""
 
-	if gbrvalid==false && js_name!="-1"&& js_param!="-111"{
+	if gbrvalid==false || js_name!="-2" || js_param!="-111"{
 		s_json = "{" + string(0x0D) + string(0x0A)
 		s_json = s_json + getQuatedJSON("id", userid, 1) + "," + string(0x0D) + string(0x0A)
 		s_json = s_json + getQuatedJSON("name", js_name, 1) + "," + string(0x0D) + string(0x0A)
