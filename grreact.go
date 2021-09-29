@@ -141,66 +141,14 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 			//msg := []byte("Hello on Serverside!")
 			err = conn.WriteMessage(websocket.TextMessage, b)
 		case "login": //Loging for user
-				fmt.Println("In login case")
+		//		fmt.Println("In login case")
 			js_result = logGBR(js_iden, js_name, js_param, getSocketIndex(conn))
-
-	/*	case "activeworkers":
-			jsonData := []byte(`{
-	"id_workings":245115,
-	"f_object_number_pult":"89",
-	"f_object_adress":"\u0433. \u041a\u0438\u0435\u0432, \u0443\u043b. \u041c\u0438\u0440\u043e\u043f\u043e\u043b\u044c\u0441\u043a\u0430\u044f, 1",
-	"f_object_name":"\u0422\u041f 2594",
-	"f_region":"\u041a\u0438\u0435\u0432",
-	"f_gbr_number":"80",
-	"f_gbr_number_rezerv":"",
-	"id_gbr":"8"
-}`)
-			mytable := StringTable{
-				1:"71",
-				2:"72",
-				3:"73",
-				4:"74",
-				5:"75",
-				6:"78",
-				7:"79",
-				8:"80",
-				9:"81",
-				10:"82",
-				11:"83",
-				12:"84",
-				13:"85",
-				14:"86",
-				15:"88",
-				16:"89",
-				17:"92",
-				18:"1",
-				19:"2",
-				20:"3",
-				21:"4",
-				22:"5",
-				23:"6",
-				24:"7",
-				25:"1",
-				26:"2",
-				27:"3",
-				28:"4",
-				29:"5",
-				30:"6",
-				31:"1",
-				32:"2",
-				35:"1",
-			}
-			fmt.Println(js_iden)
-			message := []byte("Can't Connect to case activeworkers ")
-			convertInt, _ := strconv.Atoi(js_iden)
-			if(convertInt == mytable.GetIndex(convertInt)){
-				conn.WriteJSON(jsonData)
-				fmt.Println(jsonData)
-			}else{
-				conn.WriteMessage(websocket.TextMessage,message )
-			}*/
-		case "alarmlist": //Get alarm list
-			js_result = getAlarms(js_iden, js_name, js_param)
+		case "connect":
+			fmt.Println("In connect case")
+			message := []byte( "{\"cmnd\":\"connect\",\"id\":\"8\",\"name\":\"-1\",\"param\":\"Connect_OK\"}" )
+			err = conn.WriteMessage(websocket.TextMessage, message)
+	//	case "alarmlist": //Get alarm list
+	//		js_result = getAlarms(js_iden, js_name, js_param)
 		case "alarmget": //Receive alarm
 			js_result = recAlarms(js_iden, js_cmnd, js_name, js_param)
 		case "alarmstart": //GBR starts trip
