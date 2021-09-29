@@ -231,8 +231,9 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 			fmt.Println("In connect case")
 			message := []byte( "{\"cmnd\":\"connect\",\"id\":\"8\",\"name\":\"-1\",\"param\":\"Connect_OK\"}" )
 			err = conn.WriteMessage(websocket.TextMessage, message)
-		//	testMessage := []byte("{" + "id_gbr:"+nowActiveWorkers.IdGBR+ "," + "gbr_number:" +nowActiveWorkers.GbrNumber + "}")
-		//	conn.WriteMessage(websocket.TextMessage, testMessage)
+			convertedCardBaseID := strconv.Itoa(cardBase.ID)
+			testMessage := []byte("{"+"obinfo"+":" +"[" +"{" + "id:"+convertedCardBaseID+ "," + "lat:" +cardBase.CARD_LAT +"," + "lon" + cardBase.CARD_LON + "}")
+			conn.WriteMessage(websocket.TextMessage, testMessage)
 		conn.WriteJSON(cardBase)
 			//	case "alarmlist": //Get alarm list
 	//		js_result = getAlarms(js_iden, js_name, js_param)
