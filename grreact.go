@@ -60,7 +60,7 @@ type CardBase struct {
 	CARD_START_SEC  string `json:"field_date_start_security"`
 	CARD_WARNING    string `json:"field_warning"`
 	CARD_LAT        string `json:"lat"`
-	CARD_LON        string `json:"lng"`
+	CARD_LON        string `json:"lon"`
 
 
 	CARD_FILES []string `json:"files"`
@@ -260,19 +260,21 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 
 			zone := new(Zone)
 			getJSON(`{
-"number_shleif_line":"1",
+	"number_shleif_line":"1",
    "field_shleif_name":"\\u0420\\u0423-0,4 (\\u0421\\u0420\\u041f-600)",
    "field_shleif_place":"\\u0420\\u0423-0,4 (\\u0421\\u0420\\u041f-600)"
 }`, &zone)
 			getJSON(`
-{"id":"7761",
-"lat":"50.4558307",
-"lon":"30.6366454",
-"obadr":"г.Киев, улица Красноткацкая, 40",
-"obname":"Трансформаторная подстанция ",
-"obtel":"",
-"pult":"123",
-"status":""}
+{
+	"id":"7761",
+	"lat":"50.4558307",
+	"lon":"30.6366454",
+	"obadr":"г.Киев, улица Красноткацкая, 40",
+	"obname":"Трансформаторная подстанция ",
+	"obtel":"",
+	"pult":"123",
+	"status":""
+}
 `, &cardBase)
 			fmt.Println("Successfully connected....")
 			s := string(34)
