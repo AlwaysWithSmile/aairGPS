@@ -13,12 +13,12 @@ import (
 )
 
 type CardBase struct {
-	ID                       int    `json:"id"`
+	ID                       int    `json:"idd"`
 	CARD_TYPE                int    `json:"type_object_cart"`
 	CARD_AFFILATION          int    `json:"affiliation"`
 	CARD_INSTALLER           int    `json:"installer"`
 	CARD_CLIENT              string `json:"field_client"`
-	CARD_PULTNUM             string `json:"field_pult_number"`
+	CARD_PULTNUM             string `json:"pult"`
 	CARD_RADIO_CHANEL        string `json:"field_radio_chanel"`
 	CARD_RADIO_CHANEL_RESERV string `json:"field_radio_chanel_rezerv"`
 	CARD_REGION              string `json:"field_region"`
@@ -31,8 +31,8 @@ type CardBase struct {
 	CARD_CONTROL_PANEL       string `json:"field_contol_panel"`
 	CARD_COMPANY             int    `json:"field_company"`
 	CARD_ALIENT_PULT         int    `json:"field_alien_pult"`
-	CARD_NAME                string `json:"field_name"`
-	CARD_ADRES               string `json:"field_adress"`
+	CARD_NAME                string `json:"obname"`
+	CARD_ADRES               string `json:"obadr"`
 	CARD_MODE                string `json:"field_mode"`
 	CARD_TYPE_OBJECT         string `json:"field_type_object"`
 	CARD_EXTRACT_ADDRESS     string `json:"exact_address"`
@@ -266,7 +266,7 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 }`, &zone)
 			getJSON(`
 {
-	"id":"7761",
+	"idd":"7761",
 	"lat":"50.4558307",
 	"lon":"30.6366454",
 	"obadr":"г.Киев, улица Красноткацкая, 40",
@@ -278,8 +278,9 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 `, &cardBase)
 			fmt.Println("Successfully connected....")
 			s := string(34)
+			fmt.Println(cardBase.ID)
 			convertedCardBaseID := strconv.Itoa(cardBase.ID)
-			s_json := "{" + s + "obinfo" + s + ":" + "[" + "{" + s + "id" + s + ":" + s + convertedCardBaseID + s + "," + s +"lat" + s  +":"+ s + cardBase.CARD_LAT + s +"," + s + "lon"+ s +":" + s + cardBase.CARD_LON + s +"," + s +"obadr"+ s +":" + s +cardBase.CARD_ADRES+ s +","+ s +"obname"+ s +":" + s +cardBase.CARD_NAME+ s +"," + s +"obtel"+ s +":" + s +""+ s + "," + s + "pult" + s + ":"+ s + cardBase.CARD_PULTNUM+ s +","+ s +"status"+ s +":" + s +""+ s +"}" +"]"
+			s_json := "{" + s + "obinfo" + s + ":" + "[" + "{" + s + "id" + s + ":" + s + convertedCardBaseID + s + "," + s +"lat" + s  +":"+ s + cardBase.CARD_LAT + s +"," + s + "lon"+ s +":" + s + cardBase.CARD_LON + s +"," + s +"obadr"+ s +":" + s +cardBase.CARD_ADRES+ s +","+ s +"obname"+ s +":" + s +cardBase.CARD_NAME+ s +"," +  s + "pult" + s + ":"+ s + cardBase.CARD_PULTNUM+ s +"}" +"]"
 			s_json += ","
 			s_json += s + "userlist" + s + ":" + "[" + "{" + s + "name" + s + ":"+ s + people.MAN_NAME + s + "," + "num" + ":" + s + people.MAN_NUM + s + "," + s + "tel" + s + ":" + s + people.MAN_PHONE + s + "}"+"]"
 			s_json += ","
