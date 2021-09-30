@@ -243,8 +243,8 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 				panic(err)
 			}
 			cardBase := new(CardBase)
-			card_num := "123"
-			getJSON("http://api-cs.ohholding.com.ua/object_cart/"+card_num+"/get", cardBase)
+//			card_num := "123"
+//			getJSON("http://api-cs.ohholding.com.ua/object_cart/"+card_num+"/get", cardBase)
 			fmt.Println("In connect case")
 			message := []byte( "{\"cmnd\":\"connect\",\"id\":\"8\",\"name\":\"-1\",\"param\":\"Connect_OK\"}" )
 			err = conn.WriteMessage(websocket.TextMessage, message)
@@ -264,6 +264,16 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
    "field_shleif_name":"\\u0420\\u0423-0,4 (\\u0421\\u0420\\u041f-600)",
    "field_shleif_place":"\\u0420\\u0423-0,4 (\\u0421\\u0420\\u041f-600)"
 }`, &zone)
+			getJSON(`
+{"id":"7761",
+"lat":"50.4558307",
+"lon":"30.6366454",
+"obadr":"г.Киев, улица Красноткацкая, 40",
+"obname":"Трансформаторная подстанция ",
+"obtel":"",
+"pult":"123",
+"status":""}
+`, &cardBase)
 			fmt.Println("Successfully connected....")
 			s := string(34)
 			convertedCardBaseID := strconv.Itoa(cardBase.ID)
