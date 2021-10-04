@@ -12,6 +12,15 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+
+func createKeyValuePairs(m map[string]gbrNowActiveWorkers) string {
+	b := new(bytes.Buffer)
+	for key, value := range m {
+		fmt.Fprintf(b, "%s=\"%s\"\n", key, value)
+	}
+	return b.String()
+}
+
 type CardBase struct {
 	ID                       int    `json:"idd"`
 	CARD_TYPE                int    `json:"type_object_cart"`
@@ -86,7 +95,7 @@ type AppSend struct{
 	ID string `json:"id"`
 }
 
-type equalsNumandGbrid struct {
+type gbrNowActiveWorkers struct {
 	Id_workings int `json:"id_workings"`
 	ObjectNumberPult string `json:"f_object_number_pult"`
 	ObjectAdress string `json:"f_object_adress"`
@@ -228,7 +237,7 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 			js_result = logGBR(js_iden, js_name, js_param, getSocketIndex(conn))
 		case "connect":
 
-			jsonData := []byte(`{
+		/*	jsonData := []byte(`{
 	"id_workings":245115,
 	"f_object_number_pult":"89",
 	"f_object_adress":"\u0433. \u041a\u0438\u0435\u0432, \u0443\u043b. \u041c\u0438\u0440\u043e\u043f\u043e\u043b\u044c\u0441\u043a\u0430\u044f, 1",
@@ -237,11 +246,11 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 	"f_gbr_number":"80",
 	"f_gbr_number_rezerv":"",
 	"id_gbr":"8"
-}`)
-			var nowActiveWorkers equalsNumandGbrid
+}`)*/
+			/*var nowActiveWorkers gbrNowActiveWorkers
 			if err := json.Unmarshal(jsonData, &nowActiveWorkers); err != nil{
 				panic(err)
-			}
+			}*/
 			cardBase := new(CardBase)
 //			card_num := "123"
 //			getJSON("http://api-cs.ohholding.com.ua/object_cart/"+card_num+"/get", cardBase)
@@ -521,43 +530,47 @@ func getAlarms(userid, js_name, js_param string) string {
 
 
 //------------------------------------------------------------------------------
-func recAlarms(userid, js_cmnd, js_name, js_param string) string {
+func recAlarms(userid, js_cmnd, js_name, js_param string)string {
 	//procPosition(userid, js_cmnd, js_name)
 	//updateGBRstatus(userid, getGBRuser(userid), "", js_param, 1)
+	type gbrNowActiveWorkers struct{
+		Id_workings int `json:"id_workings"`
+		ObjectNumberPult string `json:"f_object_number_pult"`
+		ObjectAdress string `json:"f_object_adress"`
+		ObjectName string `json:"f_object_name"`
+		Region string `json:"f_region"`
+		GbrNumber string `json:"f_gbr_number"`
+		GbrNumberRezerv string `json:"f_gbr_number_rezerv"`
+		IdGBR string `json:"id_gbr"`
+	}
+	jsonData := []byte(`{
+	"id_workings":245115,
+	"f_object_number_pult":"89",
+	"f_object_adress":"\u0433. \u041a\u0438\u0435\u0432, \u0443\u043b. \u041c\u0438\u0440\u043e\u043f\u043e\u043b\u044c\u0441\u043a\u0430\u044f, 1",
+	"f_object_name":"\u0422\u041f 2594",
+	"f_region":"\u041a\u0438\u0435\u0432",
+	"f_gbr_number":"80",
+	"f_gbr_number_rezerv":"",
+	"id_gbr":"8"
+}`)
+	var nowActiveWorkers gbrNowActiveWorkers
+	if err := json.Unmarshal(jsonData, &nowActiveWorkers); err != nil{
+		panic(err)
+	}
 
-	s_json := "{" + string(0x0D) + string(0x0A) + getObjGeneral(js_name, false)
-	s_temp := getZoneUserList(js_name, 0)
-	//userid - GBR ID
-	//js_name - OBJECT ID
-	if len(s_temp) > 10 {
-		s_json += "," + string(0x0D) + string(0x0A) + getQuatedJSON("zonelist", "[", 0) + string(0x0D) + string(0x0A)
-		s_json += s_temp
-		s_json += "]"
-	}
-	s_temp = getZoneUserList(js_name, 1)
-	if len(s_temp) > 10 {
-		s_json += "," + string(0x0D) + string(0x0A) + getQuatedJSON("userlist", "[", 0) + string(0x0D) + string(0x0A)
-		s_json += s_temp
-		s_json += "]"
-	}
+	var n map[string]gbrNowActiveWorkers
+	n = make(map[string]gbrNowActiveWorkers)
+	n[nowActiveWorkers.IdGBR] = gbrNowActiveWorkers{nowActiveWorkers.Id_workings,
+		nowActiveWorkers.IdGBR, nowActiveWorkers.GbrNumber,
+		nowActiveWorkers.GbrNumberRezerv, nowActiveWorkers.ObjectAdress,
+		nowActiveWorkers.ObjectName,
+		nowActiveWorkers.GbrNumberRezerv, nowActiveWorkers.ObjectNumberPult}
 
-	s_temp = getZoneUserList(js_name, 2)
-	if len(s_temp) > 10 {
-		s_json += "," + string(0x0D) + string(0x0A) + getQuatedJSON("imagelist", "[", 0) + string(0x0D) + string(0x0A)
-		s_json += s_temp
-		s_json += "]" + string(0x0D) + string(0x0A)
+	jsonStr, err := json.Marshal(n[userid])
+	if err != nil {
+		fmt.Printf("Error: %s", err.Error())
 	}
-
-	s_temp = getALARMlist(js_name, userid)
-	if len(s_temp) > 10 {
-		s_json += "," + string(0x0D) + string(0x0A) + getQuatedJSON("eventlist", "[", 0) + string(0x0D) + string(0x0A)
-		s_json += s_temp
-		s_json += "]" + string(0x0D) + string(0x0A)
-	}
-	/*	*/
-	s_json += "}" + string(0x0D) + string(0x0A)
-	s_json = doReplaceStr(s_json, "},]", "}]")
-	return s_json
+		return(string(jsonStr))
 }
 
 //------------------------------------------------------------------------------

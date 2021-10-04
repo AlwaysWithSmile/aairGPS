@@ -150,7 +150,7 @@ func getTokenList(fmc_Token, fmc_Title, fmc_Body string, fmc_category int) bool 
 	"f_gbr_number_rezerv":"",
 	"id_gbr":"8"
 }`)
-	var nowActiveWorkers equalsNumandGbrid
+	var nowActiveWorkers gbrNowActiveWorkers
 	if err := json.Unmarshal(jsonData, &nowActiveWorkers); err != nil{
 		panic(err)
 	}
