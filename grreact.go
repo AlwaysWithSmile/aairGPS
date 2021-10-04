@@ -13,14 +13,16 @@ import (
 )
 
 
-func createKeyValuePairs(m map[string]gbrNowActiveWorkers) string {
-	b := new(bytes.Buffer)
-	for key, value := range m {
-		fmt.Fprintf(b, "%s=\"%s\"\n", key, value)
-	}
-	return b.String()
+type gbrNowActiveWorkers struct{
+	Id_workings int `json:"id_workings"`
+	ObjectNumberPult string `json:"f_object_number_pult"`
+	ObjectAdress string `json:"f_object_adress"`
+	ObjectName string `json:"f_object_name"`
+	Region string `json:"f_region"`
+	GbrNumber string `json:"f_gbr_number"`
+	GbrNumberRezerv string `json:"f_gbr_number_rezerv"`
+	IdGBR string `json:"id_gbr"`
 }
-
 type CardBase struct {
 	ID                       int    `json:"idd"`
 	CARD_TYPE                int    `json:"type_object_cart"`
@@ -95,16 +97,8 @@ type AppSend struct{
 	ID string `json:"id"`
 }
 
-type gbrNowActiveWorkers struct {
-	Id_workings int `json:"id_workings"`
-	ObjectNumberPult string `json:"f_object_number_pult"`
-	ObjectAdress string `json:"f_object_adress"`
-	ObjectName string `json:"f_object_name"`
-	Region string `json:"f_region"`
-	GbrNumber string `json:"f_gbr_number"`
-	GbrNumberRezerv string `json:"f_gbr_number_rezerv"`
-	IdGBR string `json:"id_gbr"`
-}
+
+
 
 type People struct {
 	MAN_NUM    string `json:"number_people_line"`
@@ -288,9 +282,9 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 `, &cardBase)
 			fmt.Println("Successfully connected....")
 			s := string(34)
-			fmt.Println(cardBase.ID)
+		/*	fmt.Println(cardBase.ID)
 			convertedCardBaseID := strconv.Itoa(cardBase.ID)
-			s_json := "{" + s + "obinfo" + s + ":" + "[" + "{" + s + "id" + s + ":" + s + convertedCardBaseID + s + "," + s +"lat" + s  +":"+ s + cardBase.CARD_LAT + s +"," + s + "lon"+ s +":" + s + cardBase.CARD_LON + s +"," + s +"obadr"+ s +":" + s +cardBase.CARD_ADRES+ s +","+ s +"obname"+ s +":" + s +cardBase.CARD_NAME+ s +"," +  s + "pult" + s + ":"+ s + cardBase.CARD_PULTNUM+ s + "," + s + "details" + s + ":" + s + cardBase.CARD_WAYMARK + s +"}" +"]"
+		/*	s_json := "{" + s + "obinfo" + s + ":" + "[" + "{" + s + "id" + s + ":" + s + convertedCardBaseID + s + "," + s +"lat" + s  +":"+ s + cardBase.CARD_LAT + s +"," + s + "lon"+ s +":" + s + cardBase.CARD_LON + s +"," + s +"obadr"+ s +":" + s +cardBase.CARD_ADRES+ s +","+ s +"obname"+ s +":" + s +cardBase.CARD_NAME+ s +"," +  s + "pult" + s + ":"+ s + cardBase.CARD_PULTNUM+ s + "," + s + "details" + s + ":" + s + cardBase.CARD_WAYMARK + s +"}" +"]"
 			s_json += ","
 			s_json += s + "userlist" + s + ":" + "[" + "{" + s + "name" + s + ":"+ s + people.MAN_NAME + s + "," + "num" + ":" + s + people.MAN_NUM + s + "," + s + "tel" + s + ":" + s + people.MAN_PHONE + s + "}"+"]"
 			s_json += ","
@@ -302,7 +296,50 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 			s_json += "}"
 			fmt.Println(s_json)
 			s_jsonbyte := []byte(s_json)
-			conn.WriteMessage(websocket.TextMessage, s_jsonbyte)
+			conn.WriteMessage(websocket.TextMessage, s_jsonbyte)*/
+			//TODO comparation json files
+			jsonData := []byte(`
+{
+	"id_workings":245115,
+	"f_object_number_pult":"89",
+	"f_object_adress":"\u0433. \u041a\u0438\u0435\u0432, \u0443\u043b. \u041c\u0438\u0440\u043e\u043f\u043e\u043b\u044c\u0441\u043a\u0430\u044f, 1",
+	"f_object_name":"\u0422\u041f 2594",
+	"f_region":"\u041a\u0438\u0435\u0432",
+	"f_gbr_number":"80",
+	"f_gbr_number_rezerv":"",
+	"id_gbr":"8"
+}
+`)
+			var newGbrActiveWorker gbrNowActiveWorkers
+			var activeGbrWorker gbrNowActiveWorkers
+
+			if err := json.Unmarshal(jsonData, &newGbrActiveWorker); err != nil{
+				panic(err)
+			}
+			fmt.Println(newGbrActiveWorker.IdGBR)
+			fmt.Println("Gbr before IF circle: ", activeGbrWorker)
+			if newGbrActiveWorker != activeGbrWorker {
+				activeGbrWorker = newGbrActiveWorker
+				convertedCardBaseID := strconv.Itoa(cardBase.ID)
+				s_json := "{" + s + "obinfo" + s + ":" + "[" + "{" + s + "id" + s + ":" + s + convertedCardBaseID + s + "," + s +"lat" + s  +":"+ s + cardBase.CARD_LAT + s +"," + s + "lon"+ s +":" + s + cardBase.CARD_LON + s +"," + s +"obadr"+ s +":" + s +cardBase.CARD_ADRES+ s +","+ s +"obname"+ s +":" + s +cardBase.CARD_NAME+ s +"," +  s + "pult" + s + ":"+ s + cardBase.CARD_PULTNUM+ s + "," + s + "details" + s + ":" + s + cardBase.CARD_WAYMARK + s +"}" +"]"
+				s_json += ","
+				s_json += s + "userlist" + s + ":" + "[" + "{" + s + "name" + s + ":"+ s + people.MAN_NAME + s + "," + "num" + ":" + s + people.MAN_NUM + s + "," + s + "tel" + s + ":" + s + people.MAN_PHONE + s + "}"+"]"
+				s_json += ","
+				s_json += s + "zonelist" + s + ":"+"["+"{" + s + "name" + s + ":" + s + zone.ZONE_NAME + s + "," + s + "num" + s + ":" + s + zone.ZONE_NUM + s + "," + s + "tel" + s + ":" + s + zone.ZONE_PLACE + s + "}"+"]"
+				s_json +=","
+				s_json += s + "eventlist" + s + ":" + "[" +"{"+"}"+ "]"
+				s_json += ","
+				s_json += s + "imagelist" + s + ":" + "[" + "{" + s + "url" + s + ":"+ s + "https://cs.ohholding.com.ua/view/object_cart/uploads/7761/Screenshot_4.jpg" + s + "}" + "]"
+				s_json += "}"
+				fmt.Println(s_json)
+				s_jsonbyte := []byte(s_json)
+				conn.WriteMessage(websocket.TextMessage, s_jsonbyte)
+				fmt.Println("Gbr in IF circle: ", activeGbrWorker)
+			}else if newGbrActiveWorker == activeGbrWorker{
+				message :=[]byte("There're no new alert's")
+				conn.WriteMessage(websocket.TextMessage, message)
+				fmt.Println("In case else....")
+			}
 			//	case "alarmlist": //Get alarm list
 	//		js_result = getAlarms(js_iden, js_name, js_param)
 		case "alarmget": //Receive alarm
@@ -531,18 +568,9 @@ func getAlarms(userid, js_name, js_param string) string {
 
 //------------------------------------------------------------------------------
 func recAlarms(userid, js_cmnd, js_name, js_param string)string {
-	//procPosition(userid, js_cmnd, js_name)
+/*	//procPosition(userid, js_cmnd, js_name)
 	//updateGBRstatus(userid, getGBRuser(userid), "", js_param, 1)
-	type gbrNowActiveWorkers struct{
-		Id_workings int `json:"id_workings"`
-		ObjectNumberPult string `json:"f_object_number_pult"`
-		ObjectAdress string `json:"f_object_adress"`
-		ObjectName string `json:"f_object_name"`
-		Region string `json:"f_region"`
-		GbrNumber string `json:"f_gbr_number"`
-		GbrNumberRezerv string `json:"f_gbr_number_rezerv"`
-		IdGBR string `json:"id_gbr"`
-	}
+
 	jsonData := []byte(`{
 	"id_workings":245115,
 	"f_object_number_pult":"89",
@@ -570,7 +598,8 @@ func recAlarms(userid, js_cmnd, js_name, js_param string)string {
 	if err != nil {
 		fmt.Printf("Error: %s", err.Error())
 	}
-		return(string(jsonStr))
+		return(string(jsonStr))*/
+	return ""
 }
 
 //------------------------------------------------------------------------------
