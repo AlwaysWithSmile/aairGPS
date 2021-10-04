@@ -281,7 +281,7 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 }
 `, &cardBase)
 			fmt.Println("Successfully connected....")
-			s := string(34)
+
 		/*	fmt.Println(cardBase.ID)
 			convertedCardBaseID := strconv.Itoa(cardBase.ID)
 		/*	s_json := "{" + s + "obinfo" + s + ":" + "[" + "{" + s + "id" + s + ":" + s + convertedCardBaseID + s + "," + s +"lat" + s  +":"+ s + cardBase.CARD_LAT + s +"," + s + "lon"+ s +":" + s + cardBase.CARD_LON + s +"," + s +"obadr"+ s +":" + s +cardBase.CARD_ADRES+ s +","+ s +"obname"+ s +":" + s +cardBase.CARD_NAME+ s +"," +  s + "pult" + s + ":"+ s + cardBase.CARD_PULTNUM+ s + "," + s + "details" + s + ":" + s + cardBase.CARD_WAYMARK + s +"}" +"]"
@@ -321,15 +321,16 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 			if newGbrActiveWorker != activeGbrWorker {
 				activeGbrWorker = newGbrActiveWorker
 				convertedCardBaseID := strconv.Itoa(cardBase.ID)
-				s_json := "{" + s + "obinfo" + s + ":" + "[" + "{" + s + "id" + s + ":" + s + convertedCardBaseID + s + "," + s +"lat" + s  +":"+ s + cardBase.CARD_LAT + s +"," + s + "lon"+ s +":" + s + cardBase.CARD_LON + s +"," + s +"obadr"+ s +":" + s +cardBase.CARD_ADRES+ s +","+ s +"obname"+ s +":" + s +cardBase.CARD_NAME+ s +"," +  s + "pult" + s + ":"+ s + cardBase.CARD_PULTNUM+ s + "," + s + "details" + s + ":" + s + cardBase.CARD_WAYMARK + s +"}" +"]"
+				s2 := string(34)
+				s_json := "{" + s2 + "obinfo" + s2 + ":" + "[" + "{" + s2 + "id" + s2 + ":" + s2 + convertedCardBaseID + s2 + "," + s2 +"lat" + s2 +":"+ s2 + cardBase.CARD_LAT + s2 +"," + s2 + "lon"+ s2 +":" + s2 + cardBase.CARD_LON + s2 +"," + s2 +"obadr"+ s2 +":" + s2 +cardBase.CARD_ADRES+ s2 +","+ s2 +"obname"+ s2 +":" + s2 +cardBase.CARD_NAME+ s2 +"," + s2 + "pult" + s2 + ":"+ s2 + cardBase.CARD_PULTNUM+ s2 + "," + s2 + "details" + s2 + ":" + s2 + cardBase.CARD_WAYMARK + s2 +"}" +"]"
 				s_json += ","
-				s_json += s + "userlist" + s + ":" + "[" + "{" + s + "name" + s + ":"+ s + people.MAN_NAME + s + "," + "num" + ":" + s + people.MAN_NUM + s + "," + s + "tel" + s + ":" + s + people.MAN_PHONE + s + "}"+"]"
+				s_json += s2 + "userlist" + s2 + ":" + "[" + "{" + s2 + "name" + s2 + ":"+ s2 + people.MAN_NAME + s2 + "," + "num" + ":" + s2 + people.MAN_NUM + s2 + "," + s2 + "tel" + s2 + ":" + s2 + people.MAN_PHONE + s2 + "}"+"]"
 				s_json += ","
-				s_json += s + "zonelist" + s + ":"+"["+"{" + s + "name" + s + ":" + s + zone.ZONE_NAME + s + "," + s + "num" + s + ":" + s + zone.ZONE_NUM + s + "," + s + "tel" + s + ":" + s + zone.ZONE_PLACE + s + "}"+"]"
+				s_json += s2 + "zonelist" + s2 + ":"+"["+"{" + s2 + "name" + s2 + ":" + s2 + zone.ZONE_NAME + s2 + "," + s2 + "num" + s2 + ":" + s2 + zone.ZONE_NUM + s2 + "," + s2 + "tel" + s2 + ":" + s2 + zone.ZONE_PLACE + s2 + "}"+"]"
 				s_json +=","
-				s_json += s + "eventlist" + s + ":" + "[" +"{"+"}"+ "]"
+				s_json += s2 + "eventlist" + s2 + ":" + "[" +"{"+"}"+ "]"
 				s_json += ","
-				s_json += s + "imagelist" + s + ":" + "[" + "{" + s + "url" + s + ":"+ s + "https://cs.ohholding.com.ua/view/object_cart/uploads/7761/Screenshot_4.jpg" + s + "}" + "]"
+				s_json += s2 + "imagelist" + s2 + ":" + "[" + "{" + s2 + "url" + s2 + ":"+ s2 + "https://cs.ohholding.com.ua/view/object_cart/uploads/7761/Screenshot_4.jpg" + s2 + "}" + "]"
 				s_json += "}"
 				fmt.Println(s_json)
 				s_jsonbyte := []byte(s_json)
@@ -340,6 +341,7 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 				conn.WriteMessage(websocket.TextMessage, message)
 				fmt.Println("In case else....")
 			}
+			fmt.Println("After error message....")
 			//	case "alarmlist": //Get alarm list
 	//		js_result = getAlarms(js_iden, js_name, js_param)
 		case "alarmget": //Receive alarm
@@ -357,10 +359,10 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 		default:
 			js_result = setUnknown(js_iden, js_name, js_cmnd)
 		}
-
 	}
 
 	return js_result
+	
 }
 
 //------------------------------------------------------------------------------
