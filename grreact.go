@@ -224,30 +224,11 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 		case "start": //First start
 			//	js_result = startGBR(js_iden, js_name, js_param, getSocketIndex(conn))
 			json.Unmarshal(b, &gbrlistSout)
-			//msg := []byte("Hello on Serverside!")
 			err = conn.WriteMessage(websocket.TextMessage, b)
 		case "login": //Loging for user
-		//		fmt.Println("In login case")
 			js_result = logGBR(js_iden, js_name, js_param, getSocketIndex(conn))
 		case "connect":
-
-		/*	jsonData := []byte(`{
-	"id_workings":245115,
-	"f_object_number_pult":"89",
-	"f_object_adress":"\u0433. \u041a\u0438\u0435\u0432, \u0443\u043b. \u041c\u0438\u0440\u043e\u043f\u043e\u043b\u044c\u0441\u043a\u0430\u044f, 1",
-	"f_object_name":"\u0422\u041f 2594",
-	"f_region":"\u041a\u0438\u0435\u0432",
-	"f_gbr_number":"80",
-	"f_gbr_number_rezerv":"",
-	"id_gbr":"8"
-}`)*/
-			/*var nowActiveWorkers gbrNowActiveWorkers
-			if err := json.Unmarshal(jsonData, &nowActiveWorkers); err != nil{
-				panic(err)
-			}*/
 			cardBase := new(CardBase)
-//			card_num := "123"
-//			getJSON("http://api-cs.ohholding.com.ua/object_cart/"+card_num+"/get", cardBase)
 			fmt.Println("In connect case")
 			message := []byte( "{\"cmnd\":\"connect\",\"id\":\"8\",\"name\":\"-1\",\"param\":\"Connect_OK\"}" )
 			err = conn.WriteMessage(websocket.TextMessage, message)
@@ -281,22 +262,7 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 }
 `, &cardBase)
 			fmt.Println("Successfully connected....")
-
-		/*	fmt.Println(cardBase.ID)
-			convertedCardBaseID := strconv.Itoa(cardBase.ID)
-		/*	s_json := "{" + s + "obinfo" + s + ":" + "[" + "{" + s + "id" + s + ":" + s + convertedCardBaseID + s + "," + s +"lat" + s  +":"+ s + cardBase.CARD_LAT + s +"," + s + "lon"+ s +":" + s + cardBase.CARD_LON + s +"," + s +"obadr"+ s +":" + s +cardBase.CARD_ADRES+ s +","+ s +"obname"+ s +":" + s +cardBase.CARD_NAME+ s +"," +  s + "pult" + s + ":"+ s + cardBase.CARD_PULTNUM+ s + "," + s + "details" + s + ":" + s + cardBase.CARD_WAYMARK + s +"}" +"]"
-			s_json += ","
-			s_json += s + "userlist" + s + ":" + "[" + "{" + s + "name" + s + ":"+ s + people.MAN_NAME + s + "," + "num" + ":" + s + people.MAN_NUM + s + "," + s + "tel" + s + ":" + s + people.MAN_PHONE + s + "}"+"]"
-			s_json += ","
-			s_json += s + "zonelist" + s + ":"+"["+"{" + s + "name" + s + ":" + s + zone.ZONE_NAME + s + "," + s + "num" + s + ":" + s + zone.ZONE_NUM + s + "," + s + "tel" + s + ":" + s + zone.ZONE_PLACE + s + "}"+"]"
-			s_json +=","
-			s_json += s + "eventlist" + s + ":" + "[" +"{"+"}"+ "]"
-			s_json += ","
-			s_json += s + "imagelist" + s + ":" + "[" + "{" + s + "url" + s + ":"+ s + "https://cs.ohholding.com.ua/view/object_cart/uploads/7761/Screenshot_4.jpg" + s + "}" + "]"
-			s_json += "}"
-			fmt.Println(s_json)
-			s_jsonbyte := []byte(s_json)
-			conn.WriteMessage(websocket.TextMessage, s_jsonbyte)*/
+			
 			//TODO comparation json files
 			jsonData := []byte(`
 {
@@ -362,7 +328,7 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 	}
 
 	return js_result
-	
+
 }
 
 //------------------------------------------------------------------------------
