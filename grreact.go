@@ -322,6 +322,10 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 			var activeGbrWorker gbrNowActiveWorkers
 			go sleepinGoopher(jsonData, newGbrActiveWorker, activeGbrWorker, conn)
 
+			fmt.Println("/==================================================")
+			fmt.Println(js_param)
+			fmt.Println("/==================================================")
+
 			//	case "alarmlist": //Get alarm list
 	//		js_result = getAlarms(js_iden, js_name, js_param)
 		case "alarmget": //Receive alarm
