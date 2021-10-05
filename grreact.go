@@ -178,6 +178,79 @@ func bla(userid string) bool {
 	}
 	return true
 }
+func sleepinGoopher(jsonData []byte, a gbrNowActiveWorkers, b gbrNowActiveWorkers, conn *websocket.Conn){
+	cardBase := new(CardBase)
+	people := new(People)
+	zone := new(Zone)
+
+
+
+	getJSON(`{
+   "number_people_line":"1",
+   "field_people_name":"\\u0422\\u0435\\u043b\\u0435\\u0444\\u043e\\u043d \\u0434\\u0438\\u0441\\u043f\\u0435\\u0442\\u0447\\u0435\\u0440\\u0430 ",
+   "field_adress":"",
+   "field_phone":"207-69-02, 296-79-50, 296-79-90",
+   "field_access":"",
+   "field_note":""
+}`, &people)
+
+	getJSON(`{
+	"number_shleif_line":"1",
+   "field_shleif_name":"\\u0420\\u0423-0,4 (\\u0421\\u0420\\u041f-600)",
+   "field_shleif_place":"\\u0420\\u0423-0,4 (\\u0421\\u0420\\u041f-600)"
+}`, &zone)
+	getJSON(`
+{
+	"idd":"7761",
+	"lat":"50.4558307",
+	"lon":"30.6366454",
+	"obadr":"г.Киев, улица Красноткацкая, 40",
+	"obname":"Трансформаторная подстанция ",
+	"obtel":"",
+	"pult":"123",
+	"status":"",
+	"waymark":"\u043e\u0431\u044a\u0435\u043a\u0442 \u043d\u0430\u0445\u043e\u0434\u0438\u0442\u0441\u044f \u043f\u043e \u0430\u0434\u0440\u0435\u0441\u0443 \u0443\u043b\u0438\u0446\u0430 \u041a\u0440\u0430\u0441\u043d\u043e\u0442\u043a\u0430\u0446\u043a\u0430\u044f, 40 \u043d\u0430 \u0442\u0435\u0440\u0440\u0438\u0442\u043e\u0440\u0438\u0438 \u041f\u041f \u041c\u0438\u043a\u0441\u0435\u0440. \u041f\u0435\u0440\u0435\u0434 \u0444\u0438\u0440\u043c\u0435\u043d\u043d\u044b\u043c \u043c\u0430\u0433\u0430\u0437\u0438\u043d\u043e\u043c \u041c\u0438\u043a\u0443\u043b\u0438\u043d\u0435\u0446\u043a\u0438\u0439 \u0431\u0440\u043e\u0432\u0430\u0440 \u043f\u043e\u0432\u0435\u0440\u043d\u0443\u0442\u044c \u043d\u0430 \u043f\u0440\u0430\u0432\u043e \u0438 \u043f\u0440\u043e\u0435\u0445\u0430\u0442\u044c 20\u043c\u0435\u0442\u0440\u043e\u0432. \u041e\u0434\u043d\u043e\u044d\u0442\u0430\u0436\u043d\u043e\u0435 \u0442\u0435\u0445\u043d\u0438\u0447\u0435\u0441\u043a\u043e\u0435 \u043a\u0430\u043f\u0438\u0442\u0430\u043b\u044c\u043d\u043e\u0435 \u0437\u0434\u0430\u043d\u0438\u0435"
+}
+`, &cardBase)
+
+
+
+	time.Sleep(3 * time.Second)
+	fmt.Println("Snore....")
+	for  {
+		if err := json.Unmarshal(jsonData, &a); err != nil{
+			panic(err)
+		}
+		fmt.Println("gbr id before IF circle: ", b)
+		if a != b {
+			b = a
+			fmt.Println("in IF case B: ", b)
+
+			convertedCardBaseID := strconv.Itoa(cardBase.ID)
+			s2 := string(34)
+			s_json := "{" + s2 + "obinfo" + s2 + ":" + "[" + "{" + s2 + "id" + s2 + ":" + s2 + convertedCardBaseID + s2 + "," + s2 +"lat" + s2 +":"+ s2 + cardBase.CARD_LAT + s2 +"," + s2 + "lon"+ s2 +":" + s2 + cardBase.CARD_LON + s2 +"," + s2 +"obadr"+ s2 +":" + s2 +cardBase.CARD_ADRES+ s2 +","+ s2 +"obname"+ s2 +":" + s2 +cardBase.CARD_NAME+ s2 +"," + s2 + "pult" + s2 + ":"+ s2 + cardBase.CARD_PULTNUM+ s2 + "," + s2 + "details" + s2 + ":" + s2 + cardBase.CARD_WAYMARK + s2 +"}" +"]"
+			s_json += ","
+			s_json += s2 + "userlist" + s2 + ":" + "[" + "{" + s2 + "name" + s2 + ":"+ s2 + people.MAN_NAME + s2 + "," + "num" + ":" + s2 + people.MAN_NUM + s2 + "," + s2 + "tel" + s2 + ":" + s2 + people.MAN_PHONE + s2 + "}"+"]"
+			s_json += ","
+			s_json += s2 + "zonelist" + s2 + ":"+"["+"{" + s2 + "name" + s2 + ":" + s2 + zone.ZONE_NAME + s2 + "," + s2 + "num" + s2 + ":" + s2 + zone.ZONE_NUM + s2 + "," + s2 + "tel" + s2 + ":" + s2 + zone.ZONE_PLACE + s2 + "}"+"]"
+			s_json +=","
+			s_json += s2 + "eventlist" + s2 + ":" + "[" +"{"+"}"+ "]"
+			s_json += ","
+			s_json += s2 + "imagelist" + s2 + ":" + "[" + "{" + s2 + "url" + s2 + ":"+ s2 + "https://cs.ohholding.com.ua/view/object_cart/uploads/7761/Screenshot_4.jpg" + s2 + "}" + "]"
+			s_json += "}"
+			fmt.Println(s_json)
+			s_jsonbyte := []byte(s_json)
+			conn.WriteMessage(websocket.TextMessage, s_jsonbyte)
+		}else{
+			fmt.Println("There are not any new alerts....")
+			message :=[]byte( "There are not new alerts" )
+			conn.WriteMessage(websocket.TextMessage, message)
+		}
+		fmt.Println("After IF circle B: ",b)
+		fmt.Println("//==============================================")
+		time.Sleep( 1 * time.Second)
+	}
+}
 
 
 
@@ -228,41 +301,10 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 		case "login": //Loging for user
 			js_result = logGBR(js_iden, js_name, js_param, getSocketIndex(conn))
 		case "connect":
-			cardBase := new(CardBase)
 			fmt.Println("In connect case")
 			message := []byte( "{\"cmnd\":\"connect\",\"id\":\"8\",\"name\":\"-1\",\"param\":\"Connect_OK\"}" )
 			err = conn.WriteMessage(websocket.TextMessage, message)
-			people := new(People)
-			getJSON(`{
-   "number_people_line":"1",
-   "field_people_name":"\\u0422\\u0435\\u043b\\u0435\\u0444\\u043e\\u043d \\u0434\\u0438\\u0441\\u043f\\u0435\\u0442\\u0447\\u0435\\u0440\\u0430 ",
-   "field_adress":"",
-   "field_phone":"207-69-02, 296-79-50, 296-79-90",
-   "field_access":"",
-   "field_note":""
-}`, &people)
-
-			zone := new(Zone)
-			getJSON(`{
-	"number_shleif_line":"1",
-   "field_shleif_name":"\\u0420\\u0423-0,4 (\\u0421\\u0420\\u041f-600)",
-   "field_shleif_place":"\\u0420\\u0423-0,4 (\\u0421\\u0420\\u041f-600)"
-}`, &zone)
-			getJSON(`
-{
-	"idd":"7761",
-	"lat":"50.4558307",
-	"lon":"30.6366454",
-	"obadr":"г.Киев, улица Красноткацкая, 40",
-	"obname":"Трансформаторная подстанция ",
-	"obtel":"",
-	"pult":"123",
-	"status":"",
-	"waymark":"\u043e\u0431\u044a\u0435\u043a\u0442 \u043d\u0430\u0445\u043e\u0434\u0438\u0442\u0441\u044f \u043f\u043e \u0430\u0434\u0440\u0435\u0441\u0443 \u0443\u043b\u0438\u0446\u0430 \u041a\u0440\u0430\u0441\u043d\u043e\u0442\u043a\u0430\u0446\u043a\u0430\u044f, 40 \u043d\u0430 \u0442\u0435\u0440\u0440\u0438\u0442\u043e\u0440\u0438\u0438 \u041f\u041f \u041c\u0438\u043a\u0441\u0435\u0440. \u041f\u0435\u0440\u0435\u0434 \u0444\u0438\u0440\u043c\u0435\u043d\u043d\u044b\u043c \u043c\u0430\u0433\u0430\u0437\u0438\u043d\u043e\u043c \u041c\u0438\u043a\u0443\u043b\u0438\u043d\u0435\u0446\u043a\u0438\u0439 \u0431\u0440\u043e\u0432\u0430\u0440 \u043f\u043e\u0432\u0435\u0440\u043d\u0443\u0442\u044c \u043d\u0430 \u043f\u0440\u0430\u0432\u043e \u0438 \u043f\u0440\u043e\u0435\u0445\u0430\u0442\u044c 20\u043c\u0435\u0442\u0440\u043e\u0432. \u041e\u0434\u043d\u043e\u044d\u0442\u0430\u0436\u043d\u043e\u0435 \u0442\u0435\u0445\u043d\u0438\u0447\u0435\u0441\u043a\u043e\u0435 \u043a\u0430\u043f\u0438\u0442\u0430\u043b\u044c\u043d\u043e\u0435 \u0437\u0434\u0430\u043d\u0438\u0435"
-}
-`, &cardBase)
 			fmt.Println("Successfully connected....")
-			
 			//TODO comparation json files
 			jsonData := []byte(`
 {
@@ -278,36 +320,8 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 `)
 			var newGbrActiveWorker gbrNowActiveWorkers
 			var activeGbrWorker gbrNowActiveWorkers
+			go sleepinGoopher(jsonData, newGbrActiveWorker, activeGbrWorker, conn)
 
-			if err := json.Unmarshal(jsonData, &newGbrActiveWorker); err != nil{
-				panic(err)
-			}
-			fmt.Println(newGbrActiveWorker.IdGBR)
-			fmt.Println("Gbr before IF circle: ", activeGbrWorker)
-			if newGbrActiveWorker != activeGbrWorker {
-				activeGbrWorker = newGbrActiveWorker
-				convertedCardBaseID := strconv.Itoa(cardBase.ID)
-				s2 := string(34)
-				s_json := "{" + s2 + "obinfo" + s2 + ":" + "[" + "{" + s2 + "id" + s2 + ":" + s2 + convertedCardBaseID + s2 + "," + s2 +"lat" + s2 +":"+ s2 + cardBase.CARD_LAT + s2 +"," + s2 + "lon"+ s2 +":" + s2 + cardBase.CARD_LON + s2 +"," + s2 +"obadr"+ s2 +":" + s2 +cardBase.CARD_ADRES+ s2 +","+ s2 +"obname"+ s2 +":" + s2 +cardBase.CARD_NAME+ s2 +"," + s2 + "pult" + s2 + ":"+ s2 + cardBase.CARD_PULTNUM+ s2 + "," + s2 + "details" + s2 + ":" + s2 + cardBase.CARD_WAYMARK + s2 +"}" +"]"
-				s_json += ","
-				s_json += s2 + "userlist" + s2 + ":" + "[" + "{" + s2 + "name" + s2 + ":"+ s2 + people.MAN_NAME + s2 + "," + "num" + ":" + s2 + people.MAN_NUM + s2 + "," + s2 + "tel" + s2 + ":" + s2 + people.MAN_PHONE + s2 + "}"+"]"
-				s_json += ","
-				s_json += s2 + "zonelist" + s2 + ":"+"["+"{" + s2 + "name" + s2 + ":" + s2 + zone.ZONE_NAME + s2 + "," + s2 + "num" + s2 + ":" + s2 + zone.ZONE_NUM + s2 + "," + s2 + "tel" + s2 + ":" + s2 + zone.ZONE_PLACE + s2 + "}"+"]"
-				s_json +=","
-				s_json += s2 + "eventlist" + s2 + ":" + "[" +"{"+"}"+ "]"
-				s_json += ","
-				s_json += s2 + "imagelist" + s2 + ":" + "[" + "{" + s2 + "url" + s2 + ":"+ s2 + "https://cs.ohholding.com.ua/view/object_cart/uploads/7761/Screenshot_4.jpg" + s2 + "}" + "]"
-				s_json += "}"
-				fmt.Println(s_json)
-				s_jsonbyte := []byte(s_json)
-				conn.WriteMessage(websocket.TextMessage, s_jsonbyte)
-				fmt.Println("Gbr in IF circle: ", activeGbrWorker)
-			}else if newGbrActiveWorker == activeGbrWorker{
-				message :=[]byte("There're no new alert's")
-				conn.WriteMessage(websocket.TextMessage, message)
-				fmt.Println("In case else....")
-			}
-			fmt.Println("After error message....")
 			//	case "alarmlist": //Get alarm list
 	//		js_result = getAlarms(js_iden, js_name, js_param)
 		case "alarmget": //Receive alarm
