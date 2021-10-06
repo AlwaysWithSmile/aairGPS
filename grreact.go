@@ -23,6 +23,13 @@ type gbrNowActiveWorkers struct{
 	GbrNumberRezerv string `json:"f_gbr_number_rezerv"`
 	IdGBR string `json:"id_gbr"`
 }
+
+type sendStatusOfAlarm struct{
+	Status string `json:"status"`
+	Param string `json:"param"`
+	Id string `json:"id"`
+}
+
 type CardBase struct {
 	ID                       int    `json:"idd"`
 	CARD_TYPE                int    `json:"type_object_cart"`
@@ -306,6 +313,9 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 			err = conn.WriteMessage(websocket.TextMessage, message)
 			fmt.Println("Successfully connected....")
 			//TODO comparation json files
+			//	case "alarmlist": //Get alarm list
+	//		js_result = getAlarms(js_iden, js_name, js_param)
+		case "alarmget": //Receive alarm
 			jsonData := []byte(`
 {
 	"id_workings":245115,
@@ -329,11 +339,6 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 			}
 			fmt.Println("AirDecoding: ", airDecoding.ID + airDecoding.Param)
 			fmt.Println("/==================================================")
-
-			//	case "alarmlist": //Get alarm list
-	//		js_result = getAlarms(js_iden, js_name, js_param)
-		case "alarmget": //Receive alarm
-			js_result = recAlarms(js_iden, js_cmnd, js_name, js_param)
 		case "alarmstart": //GBR starts trip
 			js_result = procAlarm(js_iden, js_cmnd, js_name, js_param)
 		case "alarmpoint": //GBR at point

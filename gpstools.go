@@ -766,6 +766,9 @@ func updateGBRstatus(update_GBR_id, update_USER_id, update_GEO, update_REPORT st
 		4 - Stop Alarm
 		5 - Geo Alarm
 	*/
+	if update_GBR_status == 3 {
+
+	}
 
 	s_sql := "INSERT INTO gbrhistory (GBRIDH,GBRUSERH,GBRSTATUSH,GBRGEOH,GBRTIMEH,GBRREPORT) VALUES ("
 	s_sql += update_GBR_id + "," + update_USER_id + "," + strconv.Itoa(update_GBR_status) + ","
