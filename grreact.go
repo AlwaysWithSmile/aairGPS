@@ -243,8 +243,8 @@ func sleepinGoopher(jsonData []byte, a gbrNowActiveWorkers, b gbrNowActiveWorker
 			conn.WriteMessage(websocket.TextMessage, s_jsonbyte)
 		}else{
 			fmt.Println("There are not any new alerts....")
-			message :=[]byte( "There are not new alerts" )
-			conn.WriteMessage(websocket.TextMessage, message)
+		/*	message :=[]byte( "There are not new alerts" )
+			conn.WriteMessage(websocket.TextMessage, message)*/
 		}
 		fmt.Println("After IF circle B: ",b)
 		fmt.Println("//==============================================")
@@ -323,7 +323,11 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 			go sleepinGoopher(jsonData, newGbrActiveWorker, activeGbrWorker, conn)
 
 			fmt.Println("/==================================================")
-			fmt.Println(js_param)
+			testCheck := []byte (jsonIncoming)
+			if err := json.Unmarshal(testCheck, &airDecoding); err != nil {
+				panic(err)
+			}
+			fmt.Println("AirDecoding: ", airDecoding.ID + airDecoding.Param)
 			fmt.Println("/==================================================")
 
 			//	case "alarmlist": //Get alarm list
