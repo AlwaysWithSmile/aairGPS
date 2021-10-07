@@ -6,13 +6,10 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
+	"github.com/gorilla/websocket"
 	//	"math/rand"
 	"strconv"
-
-	"github.com/gorilla/websocket"
 )
-
 
 type gbrNowActiveWorkers struct{
 	Id_workings int `json:"id_workings"`
