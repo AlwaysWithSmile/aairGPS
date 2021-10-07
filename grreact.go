@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"time"
 
 	//	"math/rand"
@@ -257,6 +258,26 @@ func sleepinGoopher(jsonData []byte, a gbrNowActiveWorkers, b gbrNowActiveWorker
 		fmt.Println("//==============================================")
 		time.Sleep( 1 * time.Second)
 	}
+}
+
+func alarmbreak(conn *websocket.Conn) {
+	postTestData := []byte(`{
+		"status":"alarmbreak",
+		"param":"X0Y0",
+		"id":"123456"
+	}`)
+	var testjsonUnmarshal sendStatusOfAlarm
+	if err := json.Unmarshal(postTestData, testjsonUnmarshal); err != nil {
+		panic(err)
+	}
+	r := bytes.NewReader(postTestData)
+	resp, err := http.Post("http://api-cs.ohholding.com.ua/api/set-status?status=" + testjsonUnmarshal.Status+"&param="+testjsonUnmarshal.Param+"&id="+testjsonUnmarshal.Id, "application/json", r);
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("%v %v", err, resp)
+	message := []byte( "{\"cmnd\":\"connect\",\"id\":\"8\",\"name\":\"-1\",\"param\":\"Alarmbreak\"}" )
+	conn.WriteMessage(websocket.TextMessage, message)
 }
 
 
