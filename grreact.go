@@ -453,11 +453,7 @@ var upgrader = websocket.Upgrader{
 	ReadBufferSize: 1024,
 	WriteBufferSize: 1024,
 }
-//func handler(w http.ResponseWriter, r *http.Request){
-// if  conn, err := upgrader.Upgrade(w,r,nil); err != nil {
-//	 panic(err)
-//	 }
-//}
+
 func logGBR(userid, js_name, js_param string, conPosition int) string {
 
 	s_sql := "-2"
