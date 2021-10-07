@@ -517,22 +517,6 @@ func logGBR(userid, js_name, js_param string, conPosition int) string {
 	return s_json
 }
 
-//TODO testing getAlarmListMethod
-
-/*func getAlarmListTest(objectid string, userid string) string{
-
-/*	myTable := StringTable{
-		8:"78",
-	}
-	convertedobjectId, _ := strconv.Atoi(objectid)
-	converteduserId, _ := strconv.Atoi(userid)
-	if convertedobjectId != myTable.GetIndex(converteduserId) && converteduserId != convertedobjectId {
-		return ""
-	}else{
-	sout_json += "id_gbr" + nowActiveWorkers.IdGBR + "," + "f_gbr_number" + nowActiveWorkers.GbrNumber
-	}
-	return sout_json
-}*/
 //------------------------------------------------------------------------------
 
 func getAlarms(userid, js_name, js_param string) string {
