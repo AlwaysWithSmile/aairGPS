@@ -464,12 +464,6 @@ func startGBR(userid, js_name, js_param string, conPosition int) string {
 }
 
 //------------------------------------------------------------------------------
-func loginChecker(userid, js_name, js_param string, conPosition int) string {
-	return ""
-}
-
-
-//------------------------------------------------------------------------------
 var upgrader = websocket.Upgrader{
 	ReadBufferSize: 1024,
 	WriteBufferSize: 1024,
