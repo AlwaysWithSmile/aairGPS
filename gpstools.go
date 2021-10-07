@@ -791,6 +791,27 @@ func updateGBRstatus(update_GBR_id, update_USER_id, update_GEO, update_REPORT st
 		fmt.Printf("%v %v", err, resp)
 	}
 
+	if update_GBR_status == 4 {
+
+		data := []byte(`{
+		"status":"alarmstop",
+		"param":"X0Y0",
+		"id":"123456"
+	}`)
+		var testJsonUnmarshal sendStatusOfAlarm
+		if err := json.Unmarshal(data, &testJsonUnmarshal); err != nil {
+			panic(err)
+		}
+		r := bytes.NewReader(data)
+		resp, err := http.Post("http://api-cs.ohholding.com.ua/api/set-status?status=" + testJsonUnmarshal.Status+"&param="+testJsonUnmarshal.Param+"&id="+testJsonUnmarshal.Id, "application/json", r)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("%v %v", err, resp)
+	}
+
+
 	if update_GBR_status == 3 {
 
 		data := []byte(`{
