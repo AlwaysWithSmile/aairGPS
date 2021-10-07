@@ -771,7 +771,7 @@ func updateGBRstatus(update_GBR_id, update_USER_id, update_GEO, update_REPORT st
 		4 - Stop Alarm
 		5 - Geo Alarm
 	*/
-	if update_GBR_status == 6 {
+	if update_GBR_status == 5 {
 
 		data := []byte(`{
 		"status":"alarmstart",
