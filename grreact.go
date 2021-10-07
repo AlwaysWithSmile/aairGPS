@@ -85,7 +85,6 @@ type CardBase struct {
 	CARD_FILES []string `json:"files"`
 }
 
-
 type AirQuery struct {
 	ID    string `json:"id"`
 	Name  string `json:"name"`
@@ -104,9 +103,6 @@ type AppSend struct{
 	Command string `json:"cmnd"`
 	ID string `json:"id"`
 }
-
-
-
 
 type People struct {
 	MAN_NUM    string `json:"number_people_line"`
