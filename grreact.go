@@ -374,9 +374,7 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 			js_result = setUnknown(js_iden, js_name, js_cmnd)
 		}
 	}
-
 	return js_result
-
 }
 
 //------------------------------------------------------------------------------
