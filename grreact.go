@@ -542,8 +542,8 @@ func getAlarms(userid, js_name, js_param string) string {
 
 
 //------------------------------------------------------------------------------
-func recAlarms(userid, js_cmnd, js_name, js_param string)string {
-/*	//procPosition(userid, js_cmnd, js_name)
+/*func recAlarms(userid, js_cmnd, js_name, js_param string)string {
+	//procPosition(userid, js_cmnd, js_name)
 	//updateGBRstatus(userid, getGBRuser(userid), "", js_param, 1)
 
 	jsonData := []byte(`{
@@ -573,9 +573,9 @@ func recAlarms(userid, js_cmnd, js_name, js_param string)string {
 	if err != nil {
 		fmt.Printf("Error: %s", err.Error())
 	}
-		return(string(jsonStr))*/
+		return(string(jsonStr))
 	return ""
-}
+}*/
 
 //------------------------------------------------------------------------------
 func procAlarm(userid, js_cmnd, js_name, js_param string) string {
