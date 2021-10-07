@@ -176,8 +176,6 @@ func sendYeden(connIndex int, conJson string) {
 				websock_send_repeat[i] = 0
 			}
 			resendSTR = conJson
-			//resendSTR = "{" + jsonQuatedString("id") + ":" + strconv.Itoa(connDevice) + ", "
-			//resendSTR += jsonQuatedString("upgrade") + ":" + jsonQuatedString("status") + "}"
 
 			errJson := json.Unmarshal([]byte(resendSTR), &jsonResult)
 			if errJson != nil {
