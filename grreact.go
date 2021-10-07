@@ -244,8 +244,6 @@ func sleepinGoopher(jsonData []byte, a gbrNowActiveWorkers, b gbrNowActiveWorker
 			conn.WriteMessage(websocket.TextMessage, s_jsonbyte)
 		}else{
 			fmt.Println("There are not any new alerts....")
-		/*	message :=[]byte( "There are not new alerts" )
-			conn.WriteMessage(websocket.TextMessage, message)*/
 		}
 		fmt.Println("After IF circle B: ",b)
 		fmt.Println("//==============================================")
@@ -345,14 +343,10 @@ func decodeGpsJson(jsonIncoming string, conn *websocket.Conn) string {
 			var newGbrActiveWorker gbrNowActiveWorkers
 			var activeGbrWorker gbrNowActiveWorkers
 			go sleepinGoopher(jsonData, newGbrActiveWorker, activeGbrWorker, conn)
-
-			fmt.Println("/==================================================")
 			testCheck := []byte (jsonIncoming)
 			if err := json.Unmarshal(testCheck, &airDecoding); err != nil {
 				panic(err)
 			}
-			fmt.Println("AirDecoding: ", airDecoding.ID + airDecoding.Param)
-			fmt.Println("/==================================================")
 		case "alarmstart": //GBR starts trip
 			js_result = procAlarm(js_iden, js_cmnd, js_name, js_param)
 		case "alarmpoint": //GBR at point
