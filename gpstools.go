@@ -811,6 +811,25 @@ func updateGBRstatus(update_GBR_id, update_USER_id, update_GEO, update_REPORT st
 		fmt.Printf("%v %v", err, resp)
 	}
 
+	if update_GBR_status == 2 {
+		data := []byte(`{
+		"status":"alarmpoint",
+		"param":"X0Y0",
+		"id":"123456"
+	}`)
+		var testJsonUnmarshal sendStatusOfAlarm
+		if err := json.Unmarshal(data, &testJsonUnmarshal); err != nil {
+			panic(err)
+		}
+		r := bytes.NewReader(data)
+		resp, err := http.Post("http://api-cs.ohholding.com.ua/api/set-status?status=" + testJsonUnmarshal.Status+"&param="+testJsonUnmarshal.Param+"&id="+testJsonUnmarshal.Id, "application/json", r)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("%v %v", err, resp)
+	}
+
 	s_sql := "INSERT INTO gbrhistory (GBRIDH,GBRUSERH,GBRSTATUSH,GBRGEOH,GBRTIMEH,GBRREPORT) VALUES ("
 	s_sql += update_GBR_id + "," + update_USER_id + "," + strconv.Itoa(update_GBR_status) + ","
 	s_sql += dbQuatedString(update_GEO) + "," + delphiDateToSQL(time.Now().Unix()) + ","
